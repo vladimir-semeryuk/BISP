@@ -1,0 +1,6 @@
+@EchoesOfUzbekistan.Api_HostAddress = http://localhost:5297
+
+GET {{EchoesOfUzbekistan.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
