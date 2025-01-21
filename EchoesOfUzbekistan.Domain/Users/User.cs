@@ -1,5 +1,6 @@
 ﻿using EchoesOfUzbekistan.Domain.Abstractions;
 using EchoesOfUzbekistan.Domain.Common;
+using EchoesOfUzbekistan.Domain.Users.Events;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -38,8 +39,10 @@ public class User : Entity
     public static User Create(FirstName firstName, Surname surname, Email email, Country country)
     {
         // Using the Static Factory pattern to enhance encapsulation and introduce
-        // domain events later
+        // domain events
         var user = new User(Guid.NewGuid(), firstName, surname, email, DateTime.UtcNow, country);
+
+        user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id));
 
         return user;
     }
