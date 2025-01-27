@@ -5,4 +5,4 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace EchoesOfUzbekistan.Domain.Common;
-public record AudioLink(string value);
+public record ResourceLink(string value);

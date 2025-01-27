@@ -1,6 +1,8 @@
 ﻿using EchoesOfUzbekistan.Domain.Abstractions;
 using EchoesOfUzbekistan.Domain.Common;
 using EchoesOfUzbekistan.Domain.Guides;
+using EchoesOfUzbekistan.Domain.Users;
+using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,42 +14,43 @@ public class Place : Entity
 {
     public PlaceTitle Title { get; private set; }
     public PlaceDescription? Description { get; private set; }
-    public PlaceCoordinates Coordinates { get; private set; }
+    public Point Coordinates { get; private set; }
     public PlaceStatus Status { get; private set; }
     public DateTime DatePublished { get; private set; }
     public DateTime? DateEdited { get; private set; }
     public Guid AuthorId { get; private set; }
-    public Language OriginalLanguage { get; private set; }
-    public AudioLink? Audio { get; private set; }
+    //public User Author { get; private set; }
+    public Guid OriginalLanguageId { get; private set; }
+    // public Language OriginalLanguage { get; private set; }
+    public ResourceLink? AudioLink { get; private set; } = null;
+    public ResourceLink? ImageLink { get; private set; } = null;
     public ICollection<PlaceTranslation> Translations { get; private set; }
+    //public ICollection<AudioGuide> Guides { get; private set; }
+    private Place() { }
     public Place (
         Guid id, 
         PlaceTitle title,
-        PlaceCoordinates coordinates,
+        Point coordinates,
         PlaceStatus status,
-        Language originalLanguage,
+        Guid originalLanguageId,
         Guid authorId
         ) : base(id)
     {
         Title = title;
         Coordinates = coordinates;
         Status = status;
-        OriginalLanguage = originalLanguage;
+        OriginalLanguageId = originalLanguageId;
         AuthorId = authorId;
         Translations = new List<PlaceTranslation>();
         DatePublished = DateTime.UtcNow;
+        //Guides = new List<AudioGuide>();
     }
     public void AddTranslation(PlaceTranslation translation)
     {
         Translations.Add(translation);
     }
-
-    public PlaceTranslation? GetTranslation(string languageCode)
-    {
-        return Translations.FirstOrDefault(t => t.language.Code == languageCode.ToLowerInvariant());
-    }
     public PlaceTranslation? GetTranslation(Language language)
     {
-        return Translations.FirstOrDefault(t => t.language == language);
+        return Translations.FirstOrDefault(t => t.languageId == language.Id);
     }
 }

@@ -6,4 +6,4 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace EchoesOfUzbekistan.Domain.Places;
-public record PlaceTranslation(Language language, PlaceTitle title, PlaceDescription description);
+public record PlaceTranslation(Guid languageId, PlaceTitle title, PlaceDescription? description, Guid placeId);

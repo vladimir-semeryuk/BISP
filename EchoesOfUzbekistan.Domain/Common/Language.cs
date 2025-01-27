@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 namespace EchoesOfUzbekistan.Domain.Common;
 public class Language : Entity
 {
-    public Guid Id { get; private set; }
     public string Code { get; private set; } // ISO Code (e.g., "en", "ru", "es")
     public string Name { get; private set; } // Display Name (e.g., "English", "Русский")
 
-    private Language(Guid id) : base(id) { } // For EF Core
+    private Language() { }
 
     public Language(Guid id, string code, string name) : base(id)
     {

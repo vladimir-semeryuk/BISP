@@ -1,5 +1,7 @@
 ﻿using EchoesOfUzbekistan.Domain.Abstractions;
+using EchoesOfUzbekistan.Domain.Guides;
 using EchoesOfUzbekistan.Domain.Places;
+using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +12,14 @@ namespace EchoesOfUzbekistan.Domain.Routes;
 public class Route : Entity
 {
     public Guid AudioGuideId { get; private set; }
-    public ICollection<PlaceCoordinates> RouteLine { get; private set; }
+    //public AudioGuide Guide { get; private set; }
+    public LineString? RouteLine { get; private set; }
+    private Route() { }
 
-    public Route(Guid id, Guid audioGuideId, ICollection<PlaceCoordinates>? routeLine) : base(id)
+    public Route(Guid id, Guid audioGuideId, LineString? routeLine) : base(id)
     {
         AudioGuideId = audioGuideId;
-        RouteLine = routeLine ?? new List<PlaceCoordinates>();
+        //Guide = guide;
+        RouteLine = routeLine;
     }
 }

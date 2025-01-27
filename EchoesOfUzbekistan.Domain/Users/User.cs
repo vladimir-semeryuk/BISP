@@ -20,6 +20,7 @@ public class User : Entity
     public Country Country { get; private set; }
     public City? City { get; private set; }
     public AboutMe? AboutMe { get; private set; }
+    private User() { }
 
     private User(
         Guid id,
