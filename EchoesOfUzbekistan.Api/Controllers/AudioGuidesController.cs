@@ -1,4 +1,5 @@
 ﻿using EchoesOfUzbekistan.Application.AudioGuides.GetAudioGuide;
+using EchoesOfUzbekistan.Application.AudioGuides.GetAudioGuides;
 using EchoesOfUzbekistan.Domain.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +22,15 @@ public class AudioGuidesController : ControllerBase
         var query = new GetAudioGuideQuery(id);
 
         Result<AudioGuideResponse> result = await _sender.Send(query, cancellationToken);
+
+        return result.IsSuccess ? Ok(result.Value) : NotFound();
+    }
+    [HttpGet]
+    public async Task<IActionResult> GetAudioGuides([FromQuery]AudioGuideFilter filter, CancellationToken cancellationToken)
+    {
+        var query = new GetAudioGuidesQuery(filter);
+
+        Result<IReadOnlyList<AudioGuideShortResponse>> result = await _sender.Send(query, cancellationToken);
 
         return result.IsSuccess ? Ok(result.Value) : NotFound();
     }

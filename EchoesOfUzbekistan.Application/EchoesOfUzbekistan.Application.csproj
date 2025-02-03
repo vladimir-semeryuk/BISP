@@ -15,8 +15,4 @@
     <ProjectReference Include="..\EchoesOfUzbekistan.Domain\EchoesOfUzbekistan.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="AudioGuides\GetAudioGuides\" />
-  </ItemGroup>
-
 </Project>

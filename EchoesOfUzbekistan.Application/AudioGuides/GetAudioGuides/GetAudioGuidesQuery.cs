@@ -5,5 +5,5 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EchoesOfUzbekistan.Application.AudioGuides.GetAudioGuide;
-public record GetAudioGuideQuery(Guid AudioGuideId) : IQuery<AudioGuideResponse>;
+namespace EchoesOfUzbekistan.Application.AudioGuides.GetAudioGuides;
+public record GetAudioGuidesQuery(AudioGuideFilter Filter) : IQuery<IReadOnlyList<AudioGuideShortResponse>>;

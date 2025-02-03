@@ -5,7 +5,7 @@ using EchoesOfUzbekistan.Domain.Places;
 
 namespace EchoesOfUzbekistan.Application.AudioGuides.GetAudioGuide;
 
-public class AudioGuideResponse
+public abstract class AudioGuideBaseResponse
 {
     public Guid Id { get; init; }
     public string Title { get; init; }
@@ -20,6 +20,4 @@ public class AudioGuideResponse
     public Guid OriginalLanguageId { get; init; }
     public string? AudioLink { get; init; } = null;
     public string? ImageLink { get; init; } = null;
-    public ICollection<PlaceResponse> Places { get; init; } = new List<PlaceResponse>();
-    public ICollection<AudioGuideTranslationResponse> Translations { get; init; } = new List<AudioGuideTranslationResponse>();
 }

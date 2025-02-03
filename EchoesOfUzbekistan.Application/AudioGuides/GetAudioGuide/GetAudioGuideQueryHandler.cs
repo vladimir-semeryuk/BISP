@@ -105,7 +105,7 @@ internal class GetAudioGuideQueryHandler : IQueryHandler<GetAudioGuideQuery, Aud
 
                 return existingGuide;
             },
-            new { request.audioGuideId },
+            new { request.AudioGuideId },
             splitOn: "TranslationLanguageId,PlaceId"
         );
 
