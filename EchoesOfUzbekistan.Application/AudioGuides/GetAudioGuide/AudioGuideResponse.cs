@@ -1,4 +1,5 @@
-﻿using EchoesOfUzbekistan.Domain.Common;
+﻿using EchoesOfUzbekistan.Application.Places.GetPlace;
+using EchoesOfUzbekistan.Domain.Common;
 using EchoesOfUzbekistan.Domain.Guides;
 using EchoesOfUzbekistan.Domain.Places;
 
@@ -19,4 +20,6 @@ public class AudioGuideResponse
     public Guid OriginalLanguageId { get; init; }
     public string? AudioLink { get; init; } = null;
     public string? ImageLink { get; init; } = null;
+    public ICollection<PlaceResponse> Places { get; init; } = new List<PlaceResponse>();
+    public ICollection<AudioGuideTranslationResponse> Translations { get; init; } = new List<AudioGuideTranslationResponse>();
 }
