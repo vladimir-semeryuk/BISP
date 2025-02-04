@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  echoes-of-uzbekistan.api:
+    image: ${DOCKER_REGISTRY-}echoesofuzbekistanapi
+    container_name: EchoesOfUzbekistan.Api
+    build:
+      context: .
+      dockerfile: EchoesOfUzbekistan.Api/Dockerfile
+    depends_on:
+     - echoes-of-uzbekistan.db
+
+  echoes-of-uzbekistan.db:
+    image: postgis/postgis
+    container_name: EchoesOfUzbekistan.Db
+    environment:
+      - POSTGRES_DB=EOFDb
+      - POSTGRES_USER=gis
+      - POSTGRES_PASSWORD=password 
+    ports: 
+      - 5432:5432
+    volumes:
+      - ./.containers/database/postgis:/var/lib/postgresql/data
