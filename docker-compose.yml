@@ -8,16 +8,92 @@ services:
       context: .
       dockerfile: EchoesOfUzbekistan.Api/Dockerfile
     depends_on:
-     - echoes-of-uzbekistan.db
+      - echoes-of-uzbekistan-db
+    networks:
+      - EoB_network
 
-  echoes-of-uzbekistan.db:
+  echoes-of-uzbekistan-db:
     image: postgis/postgis
     container_name: EchoesOfUzbekistan.Db
     environment:
-      - POSTGRES_DB=EOFDb
+      - POSTGRES_DB=EOFDb2
       - POSTGRES_USER=gis
       - POSTGRES_PASSWORD=password 
     ports: 
-      - 5432:5432
+      - "5432:5432"
     volumes:
       - ./.containers/database/postgis:/var/lib/postgresql/data
+    networks:
+      - EoB_network
+
+  echoes-of-uzbekistan-idp:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: EchoesOfUzbekistan.Identity
+    command: start-dev
+    environment:
+      - KEYCLOAK_ADMIN=admin_v
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=postgres
+      # Point to the same database container and DB name.
+      - KC_DB_URL=jdbc:postgresql://echoes-of-uzbekistan-db/EOFDb2
+      - KC_DB_USERNAME=gis
+      - KC_DB_PASSWORD=password
+      # Specify a dedicated schema for Keycloak
+      - KC_DB_SCHEMA=keycloak
+    volumes:
+      - ./.containers/database/identity:/opt/keycloak/data
+    ports:
+      - 18080:8080
+    networks:
+      - EoB_network
+
+networks:
+  EoB_network:
+    driver: bridge
+
+# services:
+#   echoes-of-uzbekistan.api:
+#     image: ${DOCKER_REGISTRY-}echoesofuzbekistanapi
+#     container_name: EchoesOfUzbekistan.Api
+#     build:
+#       context: .
+#       dockerfile: EchoesOfUzbekistan.Api/Dockerfile
+#     depends_on:
+#      - echoes-of-uzbekistan.db
+
+#   echoes-of-uzbekistan.db:
+#     image: postgis/postgis
+#     container_name: EchoesOfUzbekistan.Db
+#     environment:
+#       - POSTGRES_DB=EOFDb
+#       - POSTGRES_USER=gis
+#       - POSTGRES_PASSWORD=password 
+#     ports: 
+#       - 5432:5432
+#     volumes:
+#       - ./.containers/database/postgis:/var/lib/postgresql/data
+#     networks:
+#       - keycloak_network
+
+#   volumes:
+#       postgis:
+#         driver: local
+
+#   echoes-of-uzbekistan.idp:
+#     image: quay.io/keycloak/keycloak:latest
+#     container_name: EchoesOfUzbekistan.Identity
+#     command: start-dev
+#     environment:
+#       - KEYCLOAK_ADMIN=admin
+#       - KEYCLOAK_ADMIN_PASSWORD=admin
+#       - KC_DB=postgres
+#       - KC_DB_URL=jdbc:postgresql://postgres/EOFDb
+#       - KC_DB_USERNAME=gis
+#       - KC_DB_PASSWORD=password
+#     volumes:
+#       - ./.containers/database/identity:/opt/keycloak/data
+#     ports:
+#       - 18080:8080
+#     networks:
+#         keycloak_network:
+#         driver: bridge

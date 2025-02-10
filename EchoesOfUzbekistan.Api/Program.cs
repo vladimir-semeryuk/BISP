@@ -1,3 +1,4 @@
+using EchoesOfUzbekistan.Api.Extensions;
 using EchoesOfUzbekistan.Application;
 using EchoesOfUzbekistan.Infrastructure;
 
@@ -20,10 +21,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.ApplyMigrations();
 }
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

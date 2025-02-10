@@ -20,6 +20,7 @@ public class User : Entity
     public Country Country { get; private set; }
     public City? City { get; private set; }
     public AboutMe? AboutMe { get; private set; }
+    public string IdentityId { get; private set; } = string.Empty;
     private User() { }
 
     private User(
@@ -48,4 +49,8 @@ public class User : Entity
         return user;
     }
     
+    public void SetIdentityId(string identityProviderId)
+    {
+        IdentityId = identityProviderId;
+    }
 }

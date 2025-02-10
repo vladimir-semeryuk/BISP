@@ -2,6 +2,7 @@
 using EchoesOfUzbekistan.Application.AudioGuides.GetAudioGuides;
 using EchoesOfUzbekistan.Domain.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,8 @@ public class AudioGuidesController : ControllerBase
     {
         _sender = sender;
     }
+
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAudioGuide(Guid id, CancellationToken cancellationToken)
     {
