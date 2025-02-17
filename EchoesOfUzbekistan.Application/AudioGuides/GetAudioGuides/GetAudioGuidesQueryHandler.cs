@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using EchoesOfUzbekistan.Application.Abstractions.Data;
+using EchoesOfUzbekistan.Application.Abstractions.FileHandling;
 using EchoesOfUzbekistan.Application.Abstractions.Messages;
 using EchoesOfUzbekistan.Application.AudioGuides.GetAudioGuide;
 using EchoesOfUzbekistan.Domain.Abstractions;
@@ -13,10 +14,12 @@ namespace EchoesOfUzbekistan.Application.AudioGuides.GetAudioGuides;
 internal class GetAudioGuidesQueryHandler : IQueryHandler<GetAudioGuidesQuery, IReadOnlyList<AudioGuideShortResponse>>
 {
     private readonly ISQLConnectionFactory _connectionFactory;
+    private readonly IFileService _fileService;
 
-    public GetAudioGuidesQueryHandler(ISQLConnectionFactory connectionFactory)
+    public GetAudioGuidesQueryHandler(ISQLConnectionFactory connectionFactory, IFileService fileService)
     {
         _connectionFactory = connectionFactory;
+        _fileService = fileService;
     }
     public async Task<Result<IReadOnlyList<AudioGuideShortResponse>>> Handle(GetAudioGuidesQuery request, CancellationToken cancellationToken)
     {
@@ -64,6 +67,19 @@ internal class GetAudioGuidesQueryHandler : IQueryHandler<GetAudioGuidesQuery, I
 
         var sql = sqlBuilder.ToString();
         IEnumerable<AudioGuideShortResponse> result = await connection.QueryAsync<AudioGuideShortResponse>(sql, parameters);
+
+        foreach (var guide in result)
+        {
+            if (!string.IsNullOrWhiteSpace(guide.ImageLink))
+            {
+                guide.ImageUrl = await _fileService.GetPresignedUrlForGetAsync(guide.ImageLink);
+            }
+            if (!string.IsNullOrWhiteSpace(guide.AudioLink))
+            {
+                guide.AudioUrl = await _fileService.GetPresignedUrlForGetAsync(guide.AudioLink);
+            }
+        }
+
         return result.ToList();
     }
 }

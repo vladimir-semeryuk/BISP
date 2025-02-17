@@ -67,6 +67,9 @@ public class AudioGuideConfiguration : IEntityTypeConfiguration<AudioGuide>
             translation.Property(t => t.title).HasConversion(
                 v => v.ToString(),
                 v => new GuideTitle(v));
+            translation.Property(ag => ag.audioLink)
+                .HasConversion(audio => audio != null ? audio.value : null, 
+                               link => link != null ? new ResourceLink(link) : null);
             translation.HasOne<Language>()
             .WithMany()
             .HasForeignKey(t => t.languageId);

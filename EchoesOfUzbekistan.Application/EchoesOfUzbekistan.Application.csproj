@@ -15,4 +15,9 @@
     <ProjectReference Include="..\EchoesOfUzbekistan.Domain\EchoesOfUzbekistan.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Places\EditPlace\" />
+    <Folder Include="Places\DeletePlace\" />
+  </ItemGroup>
+
 </Project>

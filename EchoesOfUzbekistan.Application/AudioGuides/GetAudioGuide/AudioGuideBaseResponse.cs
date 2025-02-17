@@ -20,4 +20,6 @@ public abstract class AudioGuideBaseResponse
     public Guid OriginalLanguageId { get; init; }
     public string? AudioLink { get; init; } = null;
     public string? ImageLink { get; init; } = null;
+    public string? AudioUrl { get; set; } = null;
+    public string? ImageUrl { get; set; } = null;
 }

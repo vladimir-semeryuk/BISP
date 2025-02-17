@@ -34,31 +34,40 @@ public class AudioGuide : Entity
     private AudioGuide(
         Guid id, 
         GuideTitle title, 
+        GuideInfo? description,
         City city, 
         Money price,
         Guid languageId,
         Guid authorId,
-        DateTime datePublished) : base(id)
+        DateTime datePublished,
+        ResourceLink? audioLink,
+        ResourceLink? imageLink) : base(id)
     {
         Title = title;
+        Description = description;
         City = city;
         Price = price ?? Money.Zero();
         OriginalLanguageId = languageId;
         AuthorId = authorId;
         DatePublished = datePublished;
+        AudioLink = audioLink;
+        ImageLink = imageLink;
         Translations = new List<GuideTranslation>();
         Places = new List<Place>();
     }
     public static AudioGuide Create(
         GuideTitle title,
+        GuideInfo description,
         City city,
         Money price,
         Guid languageId,
-        Guid authorId)
+        Guid authorId,
+        ResourceLink? audioLink,
+        ResourceLink? imageLink)
     {
         // Using the Static Factory pattern to enhance encapsulation and introduce domain events
-        var guide = new AudioGuide(Guid.NewGuid(), title, city, price ?? Money.Zero(),
-                                  languageId, authorId, DateTime.UtcNow);
+        var guide = new AudioGuide(Guid.NewGuid(), title, description, city, price ?? Money.Zero(),
+                                  languageId, authorId, DateTime.UtcNow, audioLink, imageLink);
 
         guide.RaiseDomainEvent(new GuideCreatedDomainEvent(guide.Id));
 
@@ -66,6 +75,57 @@ public class AudioGuide : Entity
 
         return guide;
     }
+
+    public void Update(
+        GuideTitle title,
+        GuideInfo? description,
+        City city,
+        Money price,
+        Guid languageId,
+        GuideStatus guideStatus,
+        ResourceLink? newAudioLink,
+        ResourceLink? newImageLink)
+    {
+        Title = title;
+        Description = description;
+        City = city;
+        Price = price;
+        Status = guideStatus;
+        OriginalLanguageId = languageId;
+
+        var oldImageLink = ImageLink?.value;
+        var oldAudioLink = AudioLink?.value;
+
+        // Update the image link.
+        ImageLink = newImageLink;
+        AudioLink = newAudioLink;
+
+        // If the image link has changed, add a domain event.
+        if (oldImageLink != null && !string.Equals(oldImageLink, newImageLink?.value, StringComparison.OrdinalIgnoreCase))
+        {
+            var imageUpdatedEvent = new AudioGuideResourceUpdatedEvent(oldImageLink);
+            RaiseDomainEvent(imageUpdatedEvent);
+        }
+        if (oldAudioLink != null && !string.Equals(oldAudioLink, newAudioLink?.value, StringComparison.OrdinalIgnoreCase))
+        {
+            var audioUpdatedEvent = new AudioGuideResourceUpdatedEvent(oldAudioLink);
+            RaiseDomainEvent(audioUpdatedEvent);
+        }
+
+        DateEdited = DateTime.UtcNow;
+    }
+
+    public void MarkAsDeleted()
+    {
+        var deletionEvent = new AudioGuideDeletedEvent(
+            Id,
+            AudioLink?.value,
+            ImageLink?.value,
+            Translations.Select(t => t.audioLink?.value).ToList(),
+            Places.ToList());
+        RaiseDomainEvent(deletionEvent);
+    }
+
     public void AddTranslation(GuideTranslation translation)
     {
         Translations.Add(translation);

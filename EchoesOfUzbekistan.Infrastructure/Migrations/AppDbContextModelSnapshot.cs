@@ -352,6 +352,10 @@ namespace EchoesOfUzbekistan.Infrastructure.Migrations
 
                             NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
 
+                            b1.Property<string>("audioLink")
+                                .HasColumnType("text")
+                                .HasColumnName("audio_link");
+
                             b1.Property<string>("description")
                                 .HasColumnType("text")
                                 .HasColumnName("description");
@@ -424,6 +428,10 @@ namespace EchoesOfUzbekistan.Infrastructure.Migrations
                                 .HasColumnName("id");
 
                             NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
+
+                            b1.Property<string>("audioLink")
+                                .HasColumnType("text")
+                                .HasColumnName("audio_link");
 
                             b1.Property<string>("description")
                                 .HasColumnType("text")

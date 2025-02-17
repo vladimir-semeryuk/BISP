@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -60,6 +61,9 @@ public class PlaceConfiguration : IEntityTypeConfiguration<Place>
             translation.Property(t => t.title).HasConversion(
                 v => v.ToString(),
                 v => new PlaceTitle(v));
+            translation.Property(t => t.audioLink)
+                .HasConversion(audio => audio != null ? audio.value : null,
+                               link => link != null ? new ResourceLink(link) : null);
             translation.HasOne<Language>()
             .WithMany()
             .HasForeignKey(t => t.languageId);
@@ -77,5 +81,7 @@ public class PlaceConfiguration : IEntityTypeConfiguration<Place>
         builder.HasOne<User>()
             .WithMany()
             .HasForeignKey(p => p.AuthorId);
+
+        //builder.Ignore(p => p.Guides);
     }
 }

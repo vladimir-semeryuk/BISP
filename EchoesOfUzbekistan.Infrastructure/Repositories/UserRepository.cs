@@ -17,4 +17,9 @@ internal class UserRepository : Repository<User>, IUserRepository
     {
         return await _context.Set<User>().ToListAsync();
     }
+
+    public async Task<User?> GetByIdentityIdAsync(string id, CancellationToken cancellationToken)
+    {
+        return await _context.Set<User>().FirstOrDefaultAsync(user => user.IdentityId == id);
+    }
 }

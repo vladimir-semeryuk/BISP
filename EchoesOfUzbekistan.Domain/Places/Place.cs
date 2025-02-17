@@ -5,6 +5,7 @@ using EchoesOfUzbekistan.Domain.Users;
 using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +26,8 @@ public class Place : Entity
     public ResourceLink? AudioLink { get; private set; } = null;
     public ResourceLink? ImageLink { get; private set; } = null;
     public ICollection<PlaceTranslation> Translations { get; private set; }
-    //public ICollection<AudioGuide> Guides { get; private set; }
+    [NotMapped]
+    public ICollection<AudioGuide> Guides { get; private set; }
     private Place() { }
     public Place (
         Guid id, 
@@ -43,7 +45,7 @@ public class Place : Entity
         AuthorId = authorId;
         Translations = new List<PlaceTranslation>();
         DatePublished = DateTime.UtcNow;
-        //Guides = new List<AudioGuide>();
+        Guides = new List<AudioGuide>();
     }
     public void AddTranslation(PlaceTranslation translation)
     {
@@ -52,5 +54,20 @@ public class Place : Entity
     public PlaceTranslation? GetTranslation(Language language)
     {
         return Translations.FirstOrDefault(t => t.languageId == language.Id);
+    }
+    public void MarkAsHidden()
+    {
+        if (Status == PlaceStatus.Hidden)
+            throw new InvalidOperationException("The place is already hidden.");
+        Status = PlaceStatus.Hidden;
+    }
+
+    public void MarkAsActive()
+    {
+        if (Status == PlaceStatus.Visible)
+            throw new InvalidOperationException("The place is already visible.");
+        if (Guides.Count <= 0)
+            throw new InvalidOperationException("The place that is not attached to any guide cannot be visible");
+        Status = PlaceStatus.Visible;
     }
 }

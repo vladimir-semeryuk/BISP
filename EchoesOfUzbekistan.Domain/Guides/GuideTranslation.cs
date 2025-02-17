@@ -6,4 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace EchoesOfUzbekistan.Domain.Guides;
-public record GuideTranslation(Guid languageId, GuideTitle title, GuideInfo? description, Guid AudioGuideId);
+public record GuideTranslation(
+    Guid languageId, 
+    GuideTitle title, 
+    GuideInfo? description,
+    ResourceLink? audioLink,
+    Guid AudioGuideId);

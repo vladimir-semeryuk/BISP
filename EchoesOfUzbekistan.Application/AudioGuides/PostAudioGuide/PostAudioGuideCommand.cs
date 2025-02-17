@@ -14,7 +14,6 @@ public record PostAudioGuideCommand (
     string CurrencyCode,
     Guid LanguageId,
     Guid AuthorId,
-    DateTime DatePublished,
     string? AudioLink,
     string? ImageLink
     ) : ICommand<Guid>;

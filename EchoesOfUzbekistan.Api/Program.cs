@@ -2,6 +2,8 @@ using EchoesOfUzbekistan.Api.Extensions;
 using EchoesOfUzbekistan.Application;
 using EchoesOfUzbekistan.Infrastructure;
 
+DotNetEnv.Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -14,6 +16,17 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        policy =>
+        {
+            policy.WithOrigins(new string[] { "http://localhost:5000", "http://172.26.112.1:5000/" }) // Allow requests from this origin
+                  .AllowAnyHeader()                     // Allow any headers
+                  .AllowAnyMethod();                    // Allow any HTTP methods
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -23,8 +36,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.ApplyMigrations();
 }
+app.UseCors("AllowSpecificOrigin");
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
