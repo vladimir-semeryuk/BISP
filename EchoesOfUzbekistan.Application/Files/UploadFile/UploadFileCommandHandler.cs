@@ -35,8 +35,9 @@ internal class UploadFileCommandHandler : ICommandHandler<UploadFileCommand, Fil
             Guid fileId = Guid.NewGuid();
             var strategy = FileNamingStrategyFactory.GetStrategy(request.EntityType);
             var filePath = strategy.GetFilePath(userId.Id.ToString(), fileId.ToString(), request.ContentType);
-            var url = await _fileService.GetPresignedUrlForPutAsync(request.FileName, filePath, request.ContentType, cancellationToken);
-            return Result.Success(new FileResponse(url));
+            var putUrl = await _fileService.GetPresignedUrlForPutAsync(request.FileName, filePath, request.ContentType, cancellationToken);
+            var getUrl = await _fileService.GetPresignedUrlForGetAsync(filePath, cancellationToken);
+            return Result.Success(new FileResponse(putUrl, getUrl));
         }
         catch (Exception ex)
         {

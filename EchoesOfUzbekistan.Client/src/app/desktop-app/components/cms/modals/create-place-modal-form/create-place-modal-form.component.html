@@ -1,0 +1,39 @@
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="Modal Title"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzOkLoading]="isOkLoading"
+>
+  <form
+    nz-form
+    [formGroup]="placeForm"
+    (ngSubmit)="submitForm()"
+  >
+    <nz-form-item>
+      <nz-form-label nzSpan="5" nzFor="title" nzRequired>Title</nz-form-label>
+      <nz-form-control nzSpan="20" nzErrorTip="Please input the title!">
+        <input nz-input formControlName="title" id="title" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="5" nzFor="language" nzRequired
+        >Language</nz-form-label
+      >
+      <nz-form-control [nzSpan]="20" nzErrorTip="Please select your language!">
+        <!-- <app-select-country-dropdown controlTitle="country" id="country"></app-select-country-dropdown> -->
+        <app-select-language-dropdown
+          controlTitle="language"
+          id="language"
+        ></app-select-language-dropdown>
+      </nz-form-control>
+    </nz-form-item>
+
+    <input type="hidden" formControlName="authorId" />
+    <input type="hidden" formControlName="pointCoordinates" />
+
+    <button nz-button class="submit-button" nzType="primary">Submit</button>
+  </form>
+  <p *nzModalContent>Modal Content</p>
+</nz-modal>

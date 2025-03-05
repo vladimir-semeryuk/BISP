@@ -1,0 +1,11 @@
+<button nz-button nz-dropdown [nzTrigger]="dropdownTrigger" [nzDropdownMenu]="menu">
+    {{ selectedLanguage }} 
+    <nz-icon nzType="down" />
+  </button>
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul nz-menu nzSelectable>
+    <li nz-menu-item (click)="changeLanguage('EN')">EN</li>
+    <li nz-menu-item (click)="changeLanguage('UZ')">UZ</li>
+    <li nz-menu-item (click)="changeLanguage('RU')">RU</li>
+  </ul>
+</nz-dropdown-menu>

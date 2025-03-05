@@ -11,7 +11,7 @@ public record PostPlaceCommand(
     string Title,
     string? Description,
     string Coordinates,
-    Guid LanguageId,
+    string LanguageCode,
     Guid AuthorId,
     string? AudioLink,
     string? ImageLink) : ICommand<Guid>;

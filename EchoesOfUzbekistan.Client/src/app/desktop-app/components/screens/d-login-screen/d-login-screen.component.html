@@ -1,0 +1,53 @@
+<app-navbar [navLinks]="navLinks"
+navbarClass="navbar user-navbar"></app-navbar>
+<hr>
+<section class="login-section">
+  <div class="form-container">
+    <h2>Log in to your profile</h2>
+    <form
+      nz-form
+      [formGroup]="validateForm"
+      class="login-form"
+      (ngSubmit)="submitForm()"
+    >
+      <nz-form-item>
+        <nz-form-label nzSpan="5" nzFor="email">E-mail</nz-form-label>
+        <nz-form-control nzSpan="20">
+          <!-- <input nz-input formControlName="email" id="email" /> -->
+          <nz-input-group nzPrefixIcon="user">
+            <input
+              nz-input
+              formControlName="email"
+              id="email"
+              placeholder="eou@gmail.com"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzSpan="5" nzFor="password">Password</nz-form-label>
+        <nz-form-control nzSpan="20" nzErrorTip="Please input your Password!">
+          <nz-input-group nzPrefixIcon="lock">
+            <input
+              type="password"
+              nz-input
+              formControlName="password"
+              placeholder="PaSsWoRd123!"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <div class="submit-group">
+          <button
+            nz-button
+            class="submit-button"
+            [nzType]="'primary'"
+          >
+            Log in
+          </button>
+          <!-- <button nz-button nzType="text" id="register-button">Register now!</button> -->
+          <a id="register-button" routerLink="/signup">Register now!</a>
+      </div>
+    </form>
+  </div>
+</section>

@@ -1,0 +1,84 @@
+@import '../../../../../../styles.less';
+
+.modify-guide-section {
+  max-width: @max-container-width;
+  padding: 1.75rem 3rem;
+  margin: auto;
+}
+
+.modify-guide-h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  // margin-left: 2rem;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem 5rem;
+    // min-height: 100vh;
+    padding: 3rem 0;
+    max-width: @max-container-width;
+    margin: 0 auto;
+    min-height: 90vh;
+    position: relative;
+  }
+
+  .left-column {
+    // grid-row: span 2;
+    display: flex;
+    flex-direction: column;
+    // justify-content: center;
+  }
+
+  .submit-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1.5rem;
+  }
+
+  .submit-group > button {
+    max-width: 10rem;
+  }
+
+  .generate-audio-group button {
+    margin-left: 1rem;
+  }
+
+  .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    // align-items: flex-start;
+  }
+
+  app-edit-map {
+    min-width: 20rem;
+  }
+
+  #edit-btn {
+    flex-grow: 0;
+    align-self: flex-end;
+    max-width: 7rem;
+    background-color: @yellow-main;
+    border-color: @yellow-main;
+  }
+
+  #edit-btn:hover {
+    background-color: #f6deba;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      display: flex;
+      flex-direction: column;
+    }
+    .left-column {
+      flex: none;
+      width: 100%;
+    }
+    .right-column {
+      width: 100%;
+    }
+  }

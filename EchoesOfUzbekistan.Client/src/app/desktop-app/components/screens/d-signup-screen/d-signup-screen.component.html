@@ -1,0 +1,90 @@
+<app-navbar [navLinks]="navLinks"
+navbarClass="navbar user-navbar"></app-navbar>
+<hr>
+<section class="login-section">
+  <div class="form-container">
+    <h2>Sign up for an account</h2>
+    <form
+      nz-form
+      [formGroup]="validateForm"
+      class="login-form"
+      (ngSubmit)="submitForm()"
+    >
+    <nz-form-item>
+        <nz-form-label nzSpan="5" nzFor="firstName" nzRequired>First Name</nz-form-label>
+        <nz-form-control nzSpan="20" nzErrorTip="Please input your First Name!">
+          <input nz-input formControlName="firstName" id="firstName" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzSpan="5" nzFor="surname">Surname</nz-form-label>
+        <nz-form-control nzSpan="20">
+          <input nz-input formControlName="surname" id="surname" />
+          <!-- <nz-input-group nzPrefixIcon="user">
+            <input
+              nz-input
+              formControlName="email"
+              id="email"
+              placeholder="eou@gmail.com"
+            />
+          </nz-input-group> -->
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5" nzFor="country" nzRequired>Country</nz-form-label>
+        <nz-form-control [nzSpan]="20" nzErrorTip="Please select your country!">
+          <app-select-country-dropdown controlTitle="country" id="country"></app-select-country-dropdown>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzSpan="5" nzFor="city">City</nz-form-label>
+        <nz-form-control nzSpan="20">
+          <input nz-input formControlName="city" id="city" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzSpan="5" nzFor="email" nzRequired >E-mail</nz-form-label>
+        <nz-form-control nzSpan="20" nzErrorTip="Please input your Email!">
+          <!-- <input nz-input formControlName="email" id="email" /> -->
+          <nz-input-group nzPrefixIcon="user">
+            <input
+              nz-input
+              formControlName="email"
+              id="email"
+              placeholder="eou@gmail.com"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzSpan="5" nzFor="password" nzRequired>Password</nz-form-label>
+        <nz-form-control nzSpan="20" nzErrorTip="Please input your Password!">
+          <nz-input-group nzPrefixIcon="lock">
+            <input
+              type="password"
+              nz-input
+              formControlName="password"
+              placeholder="PaSsWoRd123!"
+            />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    
+
+      <div class="submit-group">
+          <button
+            nz-button
+            class="submit-button"
+            [nzType]="'primary'"
+          >
+            Submit
+          </button>
+          <!-- <button nz-button nzType="text" id="register-button">Register now!</button> -->
+          <a id="register-button" routerLink="/login">Have an account? Log in</a>
+      </div>
+    </form>
+  </div>
+</section>

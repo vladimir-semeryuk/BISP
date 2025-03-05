@@ -1,0 +1,90 @@
+<app-navbar [navLinks]="navLinks" navbarClass="cms-navbar"></app-navbar>
+
+<section class="modify-guide-section">
+  <h1 class="modify-guide-h1">New Audio Guide</h1>
+  
+  <div class="container">
+    <div class="left-column">
+      <form
+        nz-form
+        [formGroup]="guideForm"
+        class="login-form"
+        (ngSubmit)="submitForm()"
+      >
+        <nz-form-item>
+          <nz-form-label nzSpan="5" nzFor="title" nzRequired
+            >Title</nz-form-label
+          >
+          <nz-form-control nzSpan="20" nzErrorTip="Please input the title!">
+            <input nz-input formControlName="title" id="title" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5" nzFor="language" nzRequired
+            >Language</nz-form-label
+          >
+          <nz-form-control
+            [nzSpan]="20"
+            nzErrorTip="Please select your language!"
+          >
+            <!-- <app-select-country-dropdown controlTitle="country" id="country"></app-select-country-dropdown> -->
+            <app-select-language-dropdown
+              controlTitle="language"
+              id="language"
+            ></app-select-language-dropdown>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label nzSpan="5" nzFor="city">City</nz-form-label>
+          <nz-form-control nzSpan="20">
+            <input nz-input formControlName="city" id="city" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <app-price-input controlTitle="price" id="price" [initialValue]="12"></app-price-input>
+
+        
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5">Comment</nz-form-label>
+          <nz-form-control
+            [nzSpan]="20"
+            nzHasFeedback
+            nzErrorTip="Please write something here!"
+          >
+            <nz-textarea-count [nzMaxCharacterCount]="5000">
+              <textarea
+                formControlName="comment"
+                nz-input
+                rows="2"
+                placeholder="write any thing"
+              ></textarea>
+            </nz-textarea-count>
+          </nz-form-control>
+        </nz-form-item>
+        <div class="submit-group">
+          <div class="generate-audio-group">
+            <nz-icon
+              nzType="question-circle"
+              nz-tooltip
+              nzTooltipTitle="This action could not be revoked!"
+              nzTheme="outline"
+            />
+            <button nz-button class="submit-button" nzType="default">
+              Generate Audio
+            </button>
+          </div>
+          <button nz-button class="submit-button" nzType="primary">
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="right-column">
+      <app-edit-map></app-edit-map>
+      <button nz-button nzType="primary" id="edit-btn">Edit Map</button>
+    </div>
+  </div>
+</section>

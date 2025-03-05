@@ -1,0 +1,10 @@
+<nz-select
+      [formControl]="formControl"
+      [id]="id"
+      nzPlaceHolder="Select Recording Language"
+      (blur)="onTouched()"
+      class="w-full">
+      @for (language of options; track language) {
+        <nz-option [nzValue]="language.code" [nzLabel]="language.name"></nz-option>
+      }
+</nz-select>

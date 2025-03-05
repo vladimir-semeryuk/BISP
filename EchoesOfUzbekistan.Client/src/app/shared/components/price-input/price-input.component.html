@@ -1,0 +1,31 @@
+<div [formGroup]="priceForm" (blur)="onTouched()" class="price-input-container">
+  <!-- Input Field with Validation -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="customLabelSpan" nzFor="value" nzRequired>Price</nz-form-label>
+    <nz-form-control
+      [nzValidateStatus]="valueControlStatus"
+      nzHasFeedback
+      [nzSpan]="customFieldsSpan"
+      [nzErrorTip]="errorTpl"
+    >
+      <nz-input-number nzControls="false" formControlName="value" nzPlaceHolder="Enter number"></nz-input-number>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="customLabelSpan" nzFor="currency" nzrequired>Currency</nz-form-label>
+    <nz-form-control [nzSpan]="customFieldsSpan">
+      <nz-select formControlName="currency">
+        <nz-option nzValue="UZS" nzLabel="Uzbek Soums"></nz-option>
+        <nz-option nzValue="USD" nzLabel="United States Dollar"></nz-option>
+        <nz-option nzValue="RUB" nzLabel="Russian Rouble"></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+</div>
+
+<!-- Validation Messages -->
+<ng-template #errorTpl>
+  <ng-container *ngIf="valueControl.errors?.['required']">Invalid input.</ng-container>
+  <ng-container *ngIf="valueControl.errors?.['min']">Value must be at least 0.</ng-container>
+</ng-template>

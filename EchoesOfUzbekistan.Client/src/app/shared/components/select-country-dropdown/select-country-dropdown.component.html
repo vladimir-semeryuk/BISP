@@ -1,0 +1,10 @@
+<nz-select
+      [formControl]="formControl"
+      [id]="id"
+      nzPlaceHolder="Select Country"
+      (blur)="onTouched()"
+      class="w-full">
+      @for (country of options; track country) {
+        <nz-option [nzValue]="country.code" [nzLabel]="country.name"></nz-option>
+      }
+</nz-select>

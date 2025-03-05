@@ -1,0 +1,26 @@
+    <nav [class]="navbarClass">
+    <div class="nav-container">
+      <a routerLink="/" class="logo-container">
+        <img src="Logo.png" alt="Logo" class="logo-img">
+        <p class="logo">Echoes of Uzbekistan</p>
+      </a>
+      <ul class="nav-links">
+        <li *ngFor="let link of navLinks">
+          <a [routerLink]="link.route">{{ link.label }}</a>
+        </li>
+        <li><app-navbar-dropdown></app-navbar-dropdown></li>
+      </ul>
+      <div class="mobile-menu">
+        <button nz-button nzType="default" nzShape="circle" class="menu-button" (click)="toggleDropdown()">
+          <nz-icon nzType="bars" nzTheme="outline"></nz-icon>
+        </button>
+        <ul class="dropdown-menu" *ngIf="dropdownOpen">
+          <li *ngFor="let link of navLinks">
+            <a [routerLink]="link.route" (click)="closeDropdown()">{{ link.label }}</a>
+          </li>
+          <li><app-navbar-dropdown></app-navbar-dropdown></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  

@@ -1,0 +1,156 @@
+@import '../../../../styles.less';
+
+.user-navbar {
+  background-color: #EFEFEF;
+  width: 100%;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.75rem 3rem;
+  max-width: @max-container-width;
+  margin: auto;
+}
+
+.cms-navbar {
+  background-color: @green-dark !important;
+  width: 100%;
+}
+
+.cms-navbar{
+  nz-icon {
+    color: @yellow-main;
+    font-size: 2rem;
+  }
+  .nav-links a {
+    color: @green-main;
+  }
+  .nav-links a:hover {
+    color: #EFEFEF;
+  }
+  .logo-container > .logo {
+    color: @yellow-main;
+  }
+  .logo-container .logo-img {
+    display: none;
+  }
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1.75rem;
+  text-decoration: none;
+  color: #0C0C0C;
+  transition: 0.3s;
+}
+
+.logo:hover{
+  color:#3CC37E;
+}
+
+.logo-img {
+  // display: inline-block;
+  width: 2rem;
+  transition: 0.3s;
+}
+
+.logo-container:hover .logo-img {
+  width: 2.25rem;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-links li {
+  display: flex;
+  align-items: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #0C0C0C;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  color: #3CC37E;
+  opacity: 0.7;
+}
+
+
+/* Mobile Menu */
+.mobile-menu {
+  display: none;
+  position: relative;
+}
+
+.menu-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 200px;
+  z-index: 1000;
+}
+
+.dropdown-menu li {
+  padding: 10px;
+  text-align: center;
+}
+
+.dropdown-menu a {
+  text-decoration: none;
+  color: black;
+  display: block;
+}
+
+.dropdown-menu a:hover {
+  background: #f0f0f0;
+}
+
+/* Hide desktop nav-links on mobile */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+  .mobile-menu {
+    display: block;
+  }
+}
+
+@media (max-width: 500px) {
+  .logo {
+    display: none;
+  }
+  .logo-img {
+    width: 4rem;
+  }
+}
