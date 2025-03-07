@@ -2,6 +2,7 @@
 using EchoesOfUzbekistan.Application.Abstractions.Data;
 using EchoesOfUzbekistan.Application.Abstractions.Messages;
 using EchoesOfUzbekistan.Application.Places.GetPlace;
+using EchoesOfUzbekistan.Application.Users.Services;
 using EchoesOfUzbekistan.Domain.Abstractions;
 using EchoesOfUzbekistan.Domain.Guides;
 using EchoesOfUzbekistan.Domain.Places;
@@ -15,7 +16,6 @@ namespace EchoesOfUzbekistan.Application.AudioGuides.GetAudioGuide;
 internal class GetAudioGuideQueryHandler : IQueryHandler<GetAudioGuideQuery, AudioGuideResponse>
 {
     private readonly ISQLConnectionFactory _connectionFactory;
-
     public GetAudioGuideQueryHandler(ISQLConnectionFactory connectionFactory)
     {
         _connectionFactory = connectionFactory;

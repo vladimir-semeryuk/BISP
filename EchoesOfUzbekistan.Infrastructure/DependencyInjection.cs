@@ -10,9 +10,11 @@ using EchoesOfUzbekistan.Domain.Common;
 using EchoesOfUzbekistan.Domain.Guides;
 using EchoesOfUzbekistan.Domain.Users;
 using EchoesOfUzbekistan.Infrastructure.Auth;
+using EchoesOfUzbekistan.Infrastructure.Authorisation;
 using EchoesOfUzbekistan.Infrastructure.Data;
 using EchoesOfUzbekistan.Infrastructure.FileUpload;
 using EchoesOfUzbekistan.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -93,6 +95,11 @@ public static class DependencyInjection
             return new AmazonS3Client(credentials, config);
         });
         services.AddScoped<IFileService, S3FileService>();
+
+
+        // AUTHORISATION
+        services.AddScoped<AuthorisationService>();
+        services.AddTransient<IClaimsTransformation, MyClaimsTransformation>();
 
         return services;
     }

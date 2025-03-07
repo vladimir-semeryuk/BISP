@@ -1,6 +1,7 @@
 using EchoesOfUzbekistan.Api.Extensions;
 using EchoesOfUzbekistan.Application;
 using EchoesOfUzbekistan.Infrastructure;
+using Microsoft.AspNetCore.Authentication;
 
 DotNetEnv.Env.Load();
 
@@ -16,6 +17,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
+// Temporary cors settings to test the front-end application
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -41,6 +43,7 @@ app.UseCors("AllowSpecificOrigin");
 //app.UseHttpsRedirection();
 
 app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();

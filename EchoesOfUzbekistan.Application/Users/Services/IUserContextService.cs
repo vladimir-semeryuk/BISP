@@ -7,5 +7,6 @@ using System.Threading.Tasks;
 namespace EchoesOfUzbekistan.Application.Users.Services;
 public interface IUserContextService
 {
-    string? GetCurrentUserIdAsync();
+    Guid UserId { get; }
+    string IdentityId { get; }
 }

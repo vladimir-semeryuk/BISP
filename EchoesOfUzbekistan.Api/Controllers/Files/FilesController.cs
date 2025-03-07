@@ -24,7 +24,7 @@ public class FilesController : ControllerBase
     [HttpPost("upload")]
     public async Task<IActionResult> UploadFile(string fileName, string contentType, EntityTypes entityType, CancellationToken cancellationToken)
     {
-        var userId = _userContextService.GetCurrentUserIdAsync();
+        var userId = _userContextService.UserId.ToString();
         if (userId == null)
         {
             return Unauthorized("User ID not found.");

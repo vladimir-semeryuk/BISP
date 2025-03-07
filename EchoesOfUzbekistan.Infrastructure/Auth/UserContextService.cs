@@ -1,4 +1,5 @@
 ﻿using EchoesOfUzbekistan.Application.Users.Services;
+using EchoesOfUzbekistan.Infrastructure.Authorisation;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -17,20 +18,17 @@ public class UserContextService : IUserContextService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public string? GetCurrentUserIdAsync()
-    {
-        var user = _httpContextAccessor.HttpContext?.User;
-        if (user == null)
-        {
-            return null;
-        }
+    public Guid UserId =>
+        _httpContextAccessor
+            .HttpContext?
+            .User
+            .GetUserId() ??
+        throw new ApplicationException("User Id Helper could not find the user id");
 
-        var identityId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(identityId))
-        {
-            return null;
-        }
-
-        return identityId;
-    }
+    public string IdentityId =>
+        _httpContextAccessor
+            .HttpContext?
+            .User
+            .GetIdentityId() ??
+        throw new ApplicationException("User Id Helper could not find the user id");
 }

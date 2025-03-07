@@ -22,4 +22,14 @@ internal class UserRepository : Repository<User>, IUserRepository
     {
         return await _context.Set<User>().FirstOrDefaultAsync(user => user.IdentityId == id);
     }
+
+    public override void Add(User entity)
+    {
+        foreach (Role role in entity.Roles)
+        {
+            _context.Attach(role);
+        }
+
+        _context.Add(entity);
+    }
 }
