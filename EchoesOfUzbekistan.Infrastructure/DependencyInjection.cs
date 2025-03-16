@@ -8,6 +8,7 @@ using EchoesOfUzbekistan.Application.Users.Services;
 using EchoesOfUzbekistan.Domain.Abstractions;
 using EchoesOfUzbekistan.Domain.Common;
 using EchoesOfUzbekistan.Domain.Guides;
+using EchoesOfUzbekistan.Domain.Places;
 using EchoesOfUzbekistan.Domain.Users;
 using EchoesOfUzbekistan.Infrastructure.Auth;
 using EchoesOfUzbekistan.Infrastructure.Authorisation;
@@ -47,6 +48,7 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ILanguageRepository, LanguageRepository>();
         services.AddScoped<IGuideRepository, AudioGuideRepository>();
+        services.AddScoped<IPlaceRepository, PlaceRepository>();
         services.AddScoped<IUnitOfWork>(p => p.GetRequiredService<AppDbContext>());
 
         // AUTHENTICATION

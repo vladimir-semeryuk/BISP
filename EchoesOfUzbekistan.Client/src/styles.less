@@ -8,6 +8,8 @@
 @grey-text: #828081;
 @yellow-main: #e9c895;
 
+@main-container: #efefef;
+
 @max-container-width: 90rem;
 
 *,
@@ -46,4 +48,24 @@ ol[role="list"] {
 body {
   min-height: 100vh;
   background-color: #efefef;
+}
+
+.maplibregl-popup {
+  padding: 0;
+  width: 20rem;
+  max-width: 20rem !important;
+}
+
+.maplibregl-popup .maplibregl-popup-title {
+  display: none;
+}
+.maplibregl-popup-close-button {
+  display: none;
+}
+
+.maplibregl-popup .maplibregl-popup-content {
+  padding: 0;
+  border-radius: 1rem; /* Adjust the radius as needed */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* A subtle drop shadow */
+  overflow: hidden; /* Ensures content respects the rounded corners */
 }

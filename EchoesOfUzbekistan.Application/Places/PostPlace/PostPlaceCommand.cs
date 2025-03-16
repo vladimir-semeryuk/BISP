@@ -10,7 +10,8 @@ namespace EchoesOfUzbekistan.Application.Places.PostPlace;
 public record PostPlaceCommand(
     string Title,
     string? Description,
-    string Coordinates,
+    double Longitude,
+    double Latitude,
     string LanguageCode,
     Guid AuthorId,
     string? AudioLink,

@@ -45,6 +45,16 @@
 
         <app-price-input controlTitle="price" id="price" [initialValue]="12"></app-price-input>
 
+        <nz-form-item>
+          <nz-form-label nzSpan="5">Upload Audio</nz-form-label>
+            <app-file-upload (fileUploaded)="onFileUploaded($event)" [fileType]="FileType.AUDIO"
+        [entityType]="entityType"></app-file-upload>
+        </nz-form-item>
+        
+        <nz-form-item>
+          <nz-form-label nzSpan="5">Upload Image</nz-form-label>
+          <app-file-upload (fileUploaded)="onFileUploaded($event)" [entityType]="entityType" [fileType]="FileType.IMAGE"></app-file-upload>
+        </nz-form-item>
         
         <nz-form-item>
           <nz-form-label [nzSpan]="5">Comment</nz-form-label>

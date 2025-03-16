@@ -11,9 +11,18 @@ navbarClass="navbar user-navbar"></app-navbar>
           <div class="profile-image"></div>
           <div class="user-info">
             <div class="user-info-text">
-              <h2 class="profile-name">Name Surname</h2>
+              @if (userProfile$ | async; as user) {
+                <h2 class="profile-name">{{ user.firstName }} {{ user.surname }}</h2>
+                <p class="profile-email">{{ user.email }}</p>
+                <p class="profile-location">
+                  {{ user.countryName }}@if (user.city) {, {{ user.city }} }
+                </p>
+              } @else {
+                <p>Loading profile details…</p>
+              }
+              <!-- <h2 class="profile-name">Name Surname</h2>
               <p class="profile-email">name.surnamATgmail.com</p>
-              <p class="profile-location">Uzbekistan, Tashkent</p>
+              <p class="profile-location">Uzbekistan, Tashkent</p> -->
             </div>
             <div class="friends-count-info">
               <h2>21</h2>
@@ -35,11 +44,14 @@ navbarClass="navbar user-navbar"></app-navbar>
       <div class="card about-me">
         <h3>About Me</h3>
         <div class="divider"></div>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-          dignissim, orci et luctus tincidunt, augue eros aliquam nibh, in rutrum
-          nisl purus a leo.
-        </p>
+        @if (userProfile$ | async; as user) {
+          <p>
+            @if (user.aboutMe) { {{ user.aboutMe }} }
+            @else { <i>The user has not provided any description... Message him to find out more!</i> }
+          </p>
+        } @else {
+          <p>Loading description</p>
+        }
       </div>
       <div class="card liked-guides">
         <h3>Guides I Like</h3>

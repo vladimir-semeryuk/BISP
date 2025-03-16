@@ -1,4 +1,5 @@
 ﻿using EchoesOfUzbekistan.Application.AudioGuides.GetAudioGuide;
+using EchoesOfUzbekistan.Application.Users.GetLoggedInUser;
 using EchoesOfUzbekistan.Application.Users.GetUser;
 using EchoesOfUzbekistan.Application.Users.LoginUser;
 using EchoesOfUzbekistan.Application.Users.SignupUser;
@@ -18,6 +19,17 @@ public class UsersController : ControllerBase
     public UsersController(ISender sender)
     {
         _sender = sender;
+    }
+
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<IActionResult> GetLoggedInUser(CancellationToken cancellationToken)
+    {
+        var query = new GetLoggedInUserQuery();
+
+        Result<UserResponse> result = await _sender.Send(query, cancellationToken);
+
+        return Ok(result.Value);
     }
 
     [HttpGet("{id}")]

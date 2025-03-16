@@ -1,21 +1,21 @@
 <div [formGroup]="priceForm" (blur)="onTouched()" class="price-input-container">
   <!-- Input Field with Validation -->
   <nz-form-item>
-    <nz-form-label [nzSpan]="customLabelSpan" nzFor="value" nzRequired>Price</nz-form-label>
+    <nz-form-label [nzSpan]="customLabelSpan" nzFor="moneyAmount" nzRequired>Price</nz-form-label>
     <nz-form-control
       [nzValidateStatus]="valueControlStatus"
       nzHasFeedback
       [nzSpan]="customFieldsSpan"
       [nzErrorTip]="errorTpl"
     >
-      <nz-input-number nzControls="false" formControlName="value" nzPlaceHolder="Enter number"></nz-input-number>
+      <nz-input-number nzControls="false" formControlName="moneyAmount" nzPlaceHolder="Enter number"></nz-input-number>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSpan]="customLabelSpan" nzFor="currency" nzrequired>Currency</nz-form-label>
+    <nz-form-label [nzSpan]="customLabelSpan" nzFor="currencyCode" nzrequired>Currency</nz-form-label>
     <nz-form-control [nzSpan]="customFieldsSpan">
-      <nz-select formControlName="currency">
+      <nz-select formControlName="currencyCode">
         <nz-option nzValue="UZS" nzLabel="Uzbek Soums"></nz-option>
         <nz-option nzValue="USD" nzLabel="United States Dollar"></nz-option>
         <nz-option nzValue="RUB" nzLabel="Russian Rouble"></nz-option>

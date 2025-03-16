@@ -1,10 +1,9 @@
 <nz-upload
-      nzAction=""
-      [nzCustomRequest]="customRequest"
-      nzShowUploadList="true"
-      nzMultiple="false">
-      <button nz-button>
-        <i nz-icon nzType="upload"></i>
-        Click to Upload
-      </button>
+  [nzCustomRequest]="customUpload.bind(this)"
+  [nzShowUploadList]="true"
+  nzListType="picture"
+  [nzFileList]="fileList"
+  [nzFileType]="acceptedFileTypes"
+>
+  <button nz-button type="button"><i nz-icon nzType="upload" ></i> Click to Upload</button>
 </nz-upload>

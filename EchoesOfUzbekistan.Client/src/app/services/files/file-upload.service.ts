@@ -1,65 +1,77 @@
-import { FileUploadRequest } from './../../shared/interfaces/files/file-upload-request';
 import { EntityType } from './../../shared/interfaces/common/entity-type';
-// upload.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { firstValueFrom, from, Observable, throwError } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment.development';
 import { UploadPresignedUrl } from '../../shared/interfaces/files/presigned-url';
+
 
 @Injectable({
   providedIn: 'root'
 })
-export class FileUploadService {
+export class FileService {
   private apiBaseUrl = environment.apiUrl;
+  private uploadEndpoint = `${this.apiBaseUrl}/Files/upload`;
 
   constructor(private http: HttpClient) {}
 
-  getPresignedUrls(inputParams: FileUploadRequest): Observable<UploadPresignedUrl> {
-    const params = new HttpParams()
-    .set('fileName', encodeURIComponent(inputParams.fileName))
-    .set('contentType', inputParams.contentType)
-    .set('entityType', inputParams.entityType);
+  async getPresignedUrl(fileName: string, contentType: string, entityType: EntityType): Promise<UploadPresignedUrl> {
+    const type = entityType.toString();
+    fileName = encodeURIComponent(fileName)
 
-    return this.http.post<UploadPresignedUrl>(
-      `${this.apiBaseUrl}/Files/upload`,
-      null,  // Request body (empty for file upload via query params)
-      { params }
-    ).pipe(
-      catchError(error => {
-        console.error('Upload error:', error);
-        return throwError(() => new Error('File upload failed. Please try again.'));
-      })
+    const params = new URLSearchParams({ fileName, contentType, type });
+    
+    const response = await firstValueFrom(
+      this.http.post<UploadPresignedUrl>(
+        `${this.uploadEndpoint}?${params.toString()}`,
+        {}
+      )
     );
+
+    return response;
   }
 
-  uploadFileToS3(presignedData: UploadPresignedUrl, file: File): Observable<string> {
-    return this.http.put(presignedData.put_url, file, {
+  uploadFileToR2(url: string, file: File): Observable<HttpResponse<any>> {
+    const fileName = encodeURIComponent(file.name) // needed to support some symbols and letters
+
+    return this.http.put(url, file, {
       headers: new HttpHeaders({
         'Content-Type': file.type,
-        'x-amz-meta-file-name': file.name
+        'x-amz-meta-file-name': fileName
       }),
       observe: 'response'
     }).pipe(
-      map((response: HttpResponse<any>) => {
-        if (response.status >= 200 && response.status < 300) {
-          return presignedData.get_url;
-        } else {
-          throw new Error(`Upload failed with status ${response.status}`);
-        }
+      tap((response: HttpResponse<any>) => {
+        console.log("Upload response status:", response.status);
       }),
       catchError(err => {
-        console.error('Upload error:', err);
-        return throwError(() => new Error('File upload failed. Please try again.'));
+        console.error("Upload error:", err);
+        return throwError(() => new Error("File upload failed."));
       })
     );
   }
 
   uploadFile(file: File, entityType: EntityType): Observable<string> {
-    const inputParams: FileUploadRequest = {fileName: file.name, contentType: file.type, entityType:entityType}
-    return this.getPresignedUrls(inputParams).pipe(
-      switchMap((presignedData: UploadPresignedUrl) => this.uploadFileToS3(presignedData, file))
+    return from(this.getPresignedUrl(file.name, file.type, entityType)).pipe(
+      switchMap((urls: UploadPresignedUrl) => {
+        if (!urls.putUrl || !urls.getUrl) {
+          return throwError(() => new Error("Pre-signed URLs are missing."));
+        }
+        return this.uploadFileToR2(urls.putUrl, file).pipe(
+          map(() => urls.getUrl)
+        );
+      })
     );
+  }
+
+  extractFileKey(presignedUrl: string): string {
+    try {
+      const urlObj = new URL(presignedUrl);
+      return urlObj.pathname.substring(1);
+    } catch (error) {
+      console.error("Failed to extract key:", error);
+      return "";
+    }
   }
 }

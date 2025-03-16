@@ -12,8 +12,9 @@ public record PostAudioGuideCommand (
     string City,
     decimal MoneyAmount,
     string CurrencyCode,
-    Guid LanguageId,
+    string LanguageCode,
     Guid AuthorId,
     string? AudioLink,
-    string? ImageLink
+    string? ImageLink,
+    List<Guid>? PlaceIds
     ) : ICommand<Guid>;

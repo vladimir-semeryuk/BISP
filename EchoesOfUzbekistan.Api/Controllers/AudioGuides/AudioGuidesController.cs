@@ -3,6 +3,7 @@ using EchoesOfUzbekistan.Application.AudioGuides.EditAudioGuide;
 using EchoesOfUzbekistan.Application.AudioGuides.GetAudioGuide;
 using EchoesOfUzbekistan.Application.AudioGuides.GetAudioGuides;
 using EchoesOfUzbekistan.Application.AudioGuides.PostAudioGuide;
+using EchoesOfUzbekistan.Application.Users.Services;
 using EchoesOfUzbekistan.Application.Users.SignupUser;
 using EchoesOfUzbekistan.Domain.Abstractions;
 using MediatR;
@@ -13,13 +14,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace EchoesOfUzbekistan.Api.Controllers.AudioGuides;
 [Route("api/[controller]")]
 [ApiController]
-public class AudioGuidesController : ControllerBase
+public class AudioGuidesController : AppControllerBase
 {
-    private readonly ISender _sender;
-
-    public AudioGuidesController(ISender sender)
+    public AudioGuidesController(ISender sender, IUserContextService userContextService) : base(sender, userContextService)
     {
-        _sender = sender;
     }
 
     [Authorize]
@@ -54,10 +52,11 @@ public class AudioGuidesController : ControllerBase
             req.City,
             req.MoneyAmount,
             req.CurrencyCode,
-            req.LanguageId,
+            req.LanguageCode,
             req.AuthorId,
             req.AudioLink,
-            req.ImageLink);
+            req.ImageLink,
+            req.PlaceIds);
 
         Result<Guid> result = await _sender.Send(command, cancellationToken);
 

@@ -24,26 +24,46 @@ import { SelectOptionDropdownComponent } from '../abstractions/select-option-dro
   //   }]
 })
 export class SelectLanguageDropdownComponent extends SelectOptionDropdownComponent<Language> {
+
   constructor(private languageService: LanguageService) {
-    super();
-  }
-
-  override loadOptions(): void {
-    this.languageService.getLanguages().subscribe({
-      next: (langs) => {
-        // console.log('Languages loaded:', langs);
-        this.options = langs;
-      },
-      error: (err) => {
-        console.error('Error loading languages:', err);
-      }
-    });
-  }
-
-  override setValidators(required: boolean, formControl: FormControl<Language | null>): void {
-    if (required) {
-      formControl.setValidators([Validators.required]);
+      super();
     }
-    formControl.updateValueAndValidity();
-  }
+  
+    override loadOptions(): void {
+      this.languageService.getLanguages().subscribe({
+        next: (languages) => {
+          this.options = languages;
+        },
+        error: (err) => console.error('Error loading languages:', err)
+      });
+    }
+    override setValidators(required: boolean, formControl: FormControl<Language | null>): void {
+      if (required) {
+        formControl.setValidators([Validators.required]);
+      }
+      formControl.updateValueAndValidity();
+    }
+    
+  // constructor(private languageService: LanguageService) {
+  //   super();
+  // }
+
+  // override loadOptions(): void {
+  //   this.languageService.getLanguages().subscribe({
+  //     next: (langs) => {
+  //       // console.log('Languages loaded:', langs);
+  //       this.options = langs;
+  //     },
+  //     error: (err) => {
+  //       console.error('Error loading languages:', err);
+  //     }
+  //   });
+  // }
+
+  // override setValidators(required: boolean, formControl: FormControl<Language | null>): void {
+  //   if (required) {
+  //     formControl.setValidators([Validators.required]);
+  //   }
+  //   formControl.updateValueAndValidity();
+  // }
 }

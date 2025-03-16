@@ -1,4 +1,4 @@
 export interface UploadPresignedUrl {
-    get_url: string,
-    put_url: string
+    putUrl: string,
+    getUrl: string
 }

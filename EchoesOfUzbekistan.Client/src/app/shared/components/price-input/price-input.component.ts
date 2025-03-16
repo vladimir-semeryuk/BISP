@@ -1,52 +1,74 @@
-import { Component, forwardRef, inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, ControlContainer, FormControl, Validators, ReactiveFormsModule, ControlValueAccessor, NG_VALUE_ACCESSOR, FormBuilder, AbstractControl, ValidationErrors } from '@angular/forms';
+import {
+  Component,
+  forwardRef,
+  inject,
+  Input,
+  OnInit,
+} from '@angular/core';
+import {
+  FormGroup,
+  ControlContainer,
+  FormControl,
+  Validators,
+  ReactiveFormsModule,
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR,
+  FormBuilder,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { getCustomValidateStatus } from '../../../desktop-app/components/screens/d-signup-screen/temporary-util';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-price-input',
-  imports: [NzSelectModule, NzInputNumberModule, ReactiveFormsModule, NzFormModule, CommonModule],
+  imports: [
+    NzSelectModule,
+    NzInputNumberModule,
+    ReactiveFormsModule,
+    NzFormModule,
+    CommonModule,
+  ],
   templateUrl: './price-input.component.html',
   styleUrl: './price-input.component.less',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => PriceInputComponent),
-      multi: true
-    }
+      multi: true,
+    },
   ],
   viewProviders: [
     {
       provide: ControlContainer,
-      useFactory: () => inject(ControlContainer, {skipSelf: true})
-    }
-      ],
+      useFactory: () => inject(ControlContainer, { skipSelf: true }),
+    },
+  ],
 })
 export class PriceInputComponent implements OnInit, ControlValueAccessor {
   @Input({ required: true }) controlTitle = '';
-  @Input({required: true}) id = ''
-  @Input() initialValue = 0
+  @Input({ required: true }) id = '';
+  @Input() initialValue = 0;
   @Input() required: boolean = true;
   @Input() customFieldsSpan = 20;
   @Input() customLabelSpan = 5;
 
-  parentContainer = inject(ControlContainer)
+  parentContainer = inject(ControlContainer);
 
   get parentFormContainer(): FormGroup {
     return this.parentContainer.control as FormGroup;
   }
 
-
   get valueControl(): FormControl {
-    const valueControl = this.priceForm.get('value') as FormControl
+    const valueControl = this.priceForm.get('value') as FormControl;
     return valueControl;
   }
 
   get valueControlStatus(): string {
-    return getCustomValidateStatus(this.valueControl)
+    return getCustomValidateStatus(this.valueControl);
   }
 
   priceForm!: FormGroup;
@@ -58,34 +80,31 @@ export class PriceInputComponent implements OnInit, ControlValueAccessor {
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.priceForm = this.fb.group({
-      value: [this.initialValue, [Validators.required, Validators.min(0)]],
-      currency: ['UZS', Validators.required]
-    }, {validators: this.priceValidator});
-    this.parentFormContainer.addControl(this.controlTitle, 
-      this.priceForm
-    )
+    this.priceForm = this.fb.group(
+      {
+        moneyAmount: [this.initialValue, [Validators.required, Validators.min(0)]],
+        currencyCode: ['UZS', Validators.required],
+      },
+      { validators: this.priceValidator }
+    );
+    this.parentFormContainer.addControl(this.controlTitle, this.priceForm);
 
     // Propagate any changes from the internal form group.
     this.priceForm.valueChanges.subscribe((value) => {
-      this.onChange(value);
+      this.onChange({ value });
     });
   }
 
   // Custom validator for the whole form group
-priceValidator(formGroup: AbstractControl): ValidationErrors | null {
-  const valueControl = formGroup.get('value');
-  const currencyControl = formGroup.get('currency');
+  priceValidator(formGroup: AbstractControl): ValidationErrors | null {
+    const valueControl = formGroup.get('moneyAmount');
+    const currencyControl = formGroup.get('currencyCode');
 
-  if (valueControl?.invalid || currencyControl?.invalid) {
-    return { invalidPrice: true };
+    if (valueControl?.invalid || currencyControl?.invalid) {
+      return { invalidPrice: true };
+    }
+    return null;
   }
-  return null;
-}
-
-  // Optional: Allow an initial value to be set via an @Input.
-  // (If needed, add: @Input() initialValue = 0;)
-  // private initialValue = 0;
 
   // --- ControlValueAccessor Methods ---
   writeValue(value: any): void {
@@ -106,8 +125,6 @@ priceValidator(formGroup: AbstractControl): ValidationErrors | null {
     isDisabled ? this.priceForm.disable() : this.priceForm.enable();
   }
 }
-
-
 
 // @Component({
 //   selector: 'app-price-input',
@@ -139,7 +156,7 @@ priceValidator(formGroup: AbstractControl): ValidationErrors | null {
 //   }
 
 //   ngOnInit(): void {
-//     this.parentFormContainer.addControl(this.controlTitle, 
+//     this.parentFormContainer.addControl(this.controlTitle,
 //       new FormGroup({
 //         value: new FormControl(this.initialValue, Validators.min(0)),
 //         currency: new FormControl('UZS', Validators.required)

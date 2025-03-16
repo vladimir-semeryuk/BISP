@@ -25,10 +25,10 @@ public class FilesController : ControllerBase
     public async Task<IActionResult> UploadFile(string fileName, string contentType, EntityTypes entityType, CancellationToken cancellationToken)
     {
         var userId = _userContextService.UserId.ToString();
-        if (userId == null)
-        {
-            return Unauthorized("User ID not found.");
-        }
+        //if (userId == null)
+        //{
+        //    return Unauthorized("User ID not found.");
+        //}
 
         var command = new UploadFileCommand(userId, fileName, contentType, entityType);
         var response = await _sender.Send(command, cancellationToken);

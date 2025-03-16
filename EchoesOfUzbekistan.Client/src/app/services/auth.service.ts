@@ -1,7 +1,8 @@
+import { UserProfileService } from './users/user-profile.service';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { LoginRequest } from '../shared/interfaces/auth/login-request';
-import { catchError, map, Observable, of } from 'rxjs';
+import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 import { LoginResponse } from '../shared/interfaces/auth/login-response';
 import { HttpClient } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
@@ -13,21 +14,33 @@ export class AuthService {
   apiUrl: string = environment.apiUrl;
   private accessToken = 'token';
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient, private userProfileService:UserProfileService) { }
+
 
   login(req: LoginRequest): Observable<string | null> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/Users/login`, req, { observe: 'response' }).pipe(
+
       map(response => {
         if (response.status === 200 && response.body) {
           const token = response.body.accessToken;
-          this.accessToken = token;
           localStorage.setItem(this.accessToken, token);
           return token;
         }
         return null;
       }),
+      
+      switchMap(token => {
+        if (token) {
+          return this.userProfileService.refreshUserProfile().pipe(
+            tap(profile => console.log('User profile loaded:', profile)),
+            // Return the token after refreshing the profile.
+            map(() => token)
+          );
+        }
+        return of(null);
+      }),
       catchError(error => {
-        console.error('Login failed:', error); // Add Proper error handling here
+        console.error('Login failed:', error);
         return of(null);
       })
     );
@@ -50,6 +63,7 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem(this.accessToken)
+    this.userProfileService.clearCache()
   }
 
   getToken = (): string | null => localStorage.getItem(this.accessToken) || '';
@@ -65,6 +79,5 @@ export class AuthService {
     }
     return userAuthDetails
   }
-
 }
 

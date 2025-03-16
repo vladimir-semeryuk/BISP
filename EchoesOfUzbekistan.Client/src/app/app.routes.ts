@@ -21,6 +21,7 @@ export const routes: Routes = [
     path: 'text', component: ExampleFormComponent
   },
   {
-    path: 'modify-guide', component: DModifyGuideScreenComponent
+    path: 'modify-guide', component: DModifyGuideScreenComponent,
+    canActivate: [AuthGuard]
   }
 ];

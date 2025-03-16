@@ -1,6 +1,7 @@
 ﻿using EchoesOfUzbekistan.Application.Abstractions.FileHandling;
 using EchoesOfUzbekistan.Application.Abstractions.Messages;
 using EchoesOfUzbekistan.Application.Files.Services.FileNamingStrategies;
+using EchoesOfUzbekistan.Application.Users.Services;
 using EchoesOfUzbekistan.Domain.Abstractions;
 using EchoesOfUzbekistan.Domain.Users;
 using MediatR;
@@ -14,27 +15,27 @@ namespace EchoesOfUzbekistan.Application.Files.UploadFile;
 internal class UploadFileCommandHandler : ICommandHandler<UploadFileCommand, FileResponse>
 {
     private readonly IFileService _fileService;
-    private readonly IUserRepository _userRepository;
+    private readonly IUserContextService _userContext;
 
-    public UploadFileCommandHandler(IFileService fileService, IUserRepository userRepository)
+    public UploadFileCommandHandler(IFileService fileService, IUserContextService userContextService)
     {
         _fileService = fileService;
-        _userRepository = userRepository;
+        _userContext = userContextService;
     }
 
     public async Task<Result<FileResponse>> Handle(UploadFileCommand request, CancellationToken cancellationToken)
     {
         try
         {
-            var userId = await _userRepository.GetByIdentityIdAsync(request.userId, cancellationToken);
-            if (userId == null)
-            {
-                return Result.Failure<FileResponse>(UserErrors.NotFound);
-            }
+            var userId = _userContext.UserId;
+            //if (userId == null)
+            //{
+            //    return Result.Failure<FileResponse>(UserErrors.NotFound);
+            //}
             
             Guid fileId = Guid.NewGuid();
             var strategy = FileNamingStrategyFactory.GetStrategy(request.EntityType);
-            var filePath = strategy.GetFilePath(userId.Id.ToString(), fileId.ToString(), request.ContentType);
+            var filePath = strategy.GetFilePath(userId.ToString(), fileId.ToString(), request.ContentType);
             var putUrl = await _fileService.GetPresignedUrlForPutAsync(request.FileName, filePath, request.ContentType, cancellationToken);
             var getUrl = await _fileService.GetPresignedUrlForGetAsync(filePath, cancellationToken);
             return Result.Success(new FileResponse(putUrl, getUrl));

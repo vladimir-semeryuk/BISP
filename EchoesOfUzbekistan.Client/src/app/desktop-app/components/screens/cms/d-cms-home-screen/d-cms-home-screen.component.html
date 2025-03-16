@@ -1,0 +1,18 @@
+<app-navbar [navLinks]="navLinks" navbarClass="cms-navbar"></app-navbar>
+
+<section class="content">
+    <h1 class="title">My Audio Guides</h1>
+    <div class="cards-container">
+      <nz-card *ngFor="let guide of guides" class="guide-card">
+        <nz-card-meta [nzTitle]="guide.title" [nzDescription]="guide.subtitle"></nz-card-meta>
+        <div class="card-footer">
+          <i nz-icon nzType="setting"></i>
+          <i nz-icon nzType="edit"></i>
+          <i nz-icon nzType="ellipsis"></i>
+          <a class="more-link">More</a>
+        </div>
+      </nz-card>
+    </div>
+  </section>
+
+  <app-footer></app-footer>

@@ -38,4 +38,7 @@ internal class PlaceRepository : Repository<Place>, IPlaceRepository
             .Include(guide => guide.Translations)
             .FirstOrDefaultAsync(entity => entity.Id == id, cancellationToken);
     }
+
+    public async Task<IEnumerable<Place>> GetPlacesByIdsAsync(List<Guid> placeIds) =>
+       await _context.Set<Place>().Where(p => placeIds.Contains(p.Id)).ToListAsync();
 }

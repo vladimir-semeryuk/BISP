@@ -6,8 +6,9 @@ public record CreateAudioGuideRequest(
     string City,
     decimal MoneyAmount,
     string CurrencyCode,
-    Guid LanguageId,
+    string LanguageCode,
     Guid AuthorId,
     DateTime DatePublished,
     string? AudioLink,
-    string? ImageLink);
+    string? ImageLink,
+    List<Guid>? PlaceIds);

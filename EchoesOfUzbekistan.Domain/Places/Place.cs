@@ -32,6 +32,7 @@ public class Place : Entity
     public Place (
         Guid id, 
         PlaceTitle title,
+        PlaceDescription? description,
         Point coordinates,
         PlaceStatus status,
         Guid originalLanguageId,
@@ -39,6 +40,7 @@ public class Place : Entity
         ) : base(id)
     {
         Title = title;
+        Description = description;
         Coordinates = coordinates;
         Status = status;
         OriginalLanguageId = originalLanguageId;

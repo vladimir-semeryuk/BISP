@@ -1,39 +1,51 @@
 <nz-modal
   [(nzVisible)]="isVisible"
-  nzTitle="Modal Title"
+  nzTitle="Create New Place"
   (nzOnCancel)="handleCancel()"
-  (nzOnOk)="handleOk()"
+  (nzOnOk)="submitForm()"
   [nzOkLoading]="isOkLoading"
 >
-  <form
-    nz-form
-    [formGroup]="placeForm"
-    (ngSubmit)="submitForm()"
-  >
+<div *nzModalContent >
+  <form nz-form [formGroup]="placeForm" (ngSubmit)="submitForm()">
     <nz-form-item>
       <nz-form-label nzSpan="5" nzFor="title" nzRequired>Title</nz-form-label>
-      <nz-form-control nzSpan="20" nzErrorTip="Please input the title!">
+      <nz-form-control nzSpan="19" nzErrorTip="Please input the title!">
         <input nz-input formControlName="title" id="title" />
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="5" nzFor="language" nzRequired
-        >Language</nz-form-label
+      <nz-form-label nzSpan="5" nzFor="languageCode" nzRequired>Language</nz-form-label>
+      <nz-form-control nzSpan="19" nzErrorTip="Please select your language!">
+        <app-select-language-dropdown controlTitle="languageCode" id="languageCode"></app-select-language-dropdown>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="5">Description</nz-form-label>
+      <nz-form-control
+        [nzSpan]="20"
+        nzHasFeedback
+        nzErrorTip="Invalid input!"
       >
-      <nz-form-control [nzSpan]="20" nzErrorTip="Please select your language!">
-        <!-- <app-select-country-dropdown controlTitle="country" id="country"></app-select-country-dropdown> -->
-        <app-select-language-dropdown
-          controlTitle="language"
-          id="language"
-        ></app-select-language-dropdown>
+        <nz-textarea-count [nzMaxCharacterCount]="5000">
+          <textarea
+            nz-input
+            formControlName="description"
+            id="description"
+            [nzAutosize]="true"
+            rows="2"
+            placeholder="Provide description of the place"
+          ></textarea>
+        </nz-textarea-count>
       </nz-form-control>
     </nz-form-item>
 
     <input type="hidden" formControlName="authorId" />
-    <input type="hidden" formControlName="pointCoordinates" />
-
-    <button nz-button class="submit-button" nzType="primary">Submit</button>
+    <input type="hidden" formControlName="latitude" />
+    <input type="hidden" formControlName="longitude" />
   </form>
-  <p *nzModalContent>Modal Content</p>
+</div>
+  
+  <!-- <p *nzModalContent>Modal Content</p> -->
 </nz-modal>
