@@ -17,6 +17,7 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.3" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite" Version="9.0.3" />
     <PackageReference Include="Npgsql.NetTopologySuite" Version="9.0.2" />
+    <PackageReference Include="Stripe.net" Version="48.0.0" />
   </ItemGroup>
 
   <ItemGroup>

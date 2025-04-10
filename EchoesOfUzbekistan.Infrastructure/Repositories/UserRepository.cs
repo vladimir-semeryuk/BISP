@@ -15,12 +15,12 @@ internal class UserRepository : Repository<User>, IUserRepository
 
     public async Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return await _context.Set<User>().ToListAsync();
+        return await _context.Set<User>().ToListAsync(cancellationToken: cancellationToken);
     }
 
     public async Task<User?> GetByIdentityIdAsync(string id, CancellationToken cancellationToken)
     {
-        return await _context.Set<User>().FirstOrDefaultAsync(user => user.IdentityId == id);
+        return await _context.Set<User>().FirstOrDefaultAsync(user => user.IdentityId == id, cancellationToken: cancellationToken);
     }
 
     public override void Add(User entity)

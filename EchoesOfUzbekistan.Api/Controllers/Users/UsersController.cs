@@ -1,12 +1,12 @@
-﻿using EchoesOfUzbekistan.Application.AudioGuides.GetAudioGuide;
+﻿using EchoesOfUzbekistan.Application.Users.FollowUser;
 using EchoesOfUzbekistan.Application.Users.GetLoggedInUser;
 using EchoesOfUzbekistan.Application.Users.GetUser;
 using EchoesOfUzbekistan.Application.Users.LoginUser;
 using EchoesOfUzbekistan.Application.Users.SignupUser;
+using EchoesOfUzbekistan.Application.Users.UnfollowUser;
 using EchoesOfUzbekistan.Domain.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EchoesOfUzbekistan.Api.Controllers.Users;
@@ -82,5 +82,29 @@ public class UsersController : ControllerBase
         }
 
         return Ok(result.Value);
+    }
+
+    [Authorize]
+    [HttpPost("{id}/follow")]
+    public async Task<IActionResult> Follow(Guid id)
+    {
+        var result = await _sender.Send(new FollowUserCommand(id));
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+        return Ok();
+    }
+
+    [Authorize]
+    [HttpDelete("{id}/unfollow")]
+    public async Task<IActionResult> Unfollow(Guid id)
+    {
+        var result = await _sender.Send(new UnfollowUserCommand(id));
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+        return Ok();
     }
 }

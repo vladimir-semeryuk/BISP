@@ -4,6 +4,7 @@ using EchoesOfUzbekistan.Application.Users.Services;
 using EchoesOfUzbekistan.Domain.Abstractions;
 using EchoesOfUzbekistan.Domain.Common;
 using EchoesOfUzbekistan.Domain.Guides;
+using EchoesOfUzbekistan.Domain.Guides.Repositories;
 using EchoesOfUzbekistan.Domain.Places;
 using EchoesOfUzbekistan.Domain.Users;
 using System;

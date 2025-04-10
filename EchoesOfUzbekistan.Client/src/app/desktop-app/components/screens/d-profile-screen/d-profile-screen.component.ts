@@ -35,7 +35,7 @@ export class DProfileScreenComponent {
           // If userId exists in the URL, get the specific user's profile 
           this.userProfile$ = this.userProfileService.getUserProfileById(userId);
         } else {
-          // Otherwise, show the logged-in user's profile (cached)
+          // Otherwise,logged-in user's profile is shown
           this.userProfile$ = this.userProfileService.getUserProfile();
         }
       });

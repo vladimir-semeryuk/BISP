@@ -40,7 +40,7 @@ public class PostPlaceCommandHandler : ICommandHandler<PostPlaceCommand, Guid>
         }
         if (request.AuthorId != _userContext.UserId)
         {
-            return Result.Failure<Guid>(UserErrors.AuthorNotFound); // CHANGE TO CANNOT POST FOR OTHER USERS
+            return Result.Failure<Guid>(UserErrors.CannotPostForOthers);
         }
 
         var author = await _userRepository.GetByIdAsync(request.AuthorId, cancellationToken);
@@ -60,7 +60,6 @@ public class PostPlaceCommandHandler : ICommandHandler<PostPlaceCommand, Guid>
             originalLanguageId: language.Id,
             authorId: request.AuthorId);
 
-        // Persist the new place.
         _placeRepository.Add(place);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);

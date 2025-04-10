@@ -15,13 +15,7 @@ import { SelectOptionDropdownComponent } from '../abstractions/select-option-dro
       provide: ControlContainer,
       useFactory: () => inject(ControlContainer, {skipSelf: true})
     }
-      ],
-  // providers: [
-  //   {
-  //     provide: NG_VALUE_ACCESSOR,
-  //     useExisting: forwardRef(() => SelectLanguageDropdownComponent),
-  //     multi: true
-  //   }]
+      ]
 })
 export class SelectLanguageDropdownComponent extends SelectOptionDropdownComponent<Language> {
 
@@ -43,27 +37,5 @@ export class SelectLanguageDropdownComponent extends SelectOptionDropdownCompone
       }
       formControl.updateValueAndValidity();
     }
-    
-  // constructor(private languageService: LanguageService) {
-  //   super();
-  // }
-
-  // override loadOptions(): void {
-  //   this.languageService.getLanguages().subscribe({
-  //     next: (langs) => {
-  //       // console.log('Languages loaded:', langs);
-  //       this.options = langs;
-  //     },
-  //     error: (err) => {
-  //       console.error('Error loading languages:', err);
-  //     }
-  //   });
-  // }
-
-  // override setValidators(required: boolean, formControl: FormControl<Language | null>): void {
-  //   if (required) {
-  //     formControl.setValidators([Validators.required]);
-  //   }
-  //   formControl.updateValueAndValidity();
-  // }
+  
 }

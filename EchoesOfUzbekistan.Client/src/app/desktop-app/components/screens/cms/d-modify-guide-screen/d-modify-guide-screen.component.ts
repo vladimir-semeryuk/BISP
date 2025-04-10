@@ -118,8 +118,8 @@ export class DModifyGuideScreenComponent {
         title: formValues.title, 
         description: formValues.description,
         city: formValues.city,
-        moneyAmount: formValues.price.value, 
-        currencyCode: formValues.price.currency,
+        moneyAmount: formValues.price.moneyAmount, 
+        currencyCode: formValues.price.currencyCode,
         languageCode: formValues.language,
         authorId: this.currentUserId,
         datePublished: formValues.datePublished,
@@ -129,6 +129,8 @@ export class DModifyGuideScreenComponent {
       };
 
       console.log('submit', this.guideForm.value);
+
+      console.log('submit payload', requestPayload);
       this.guideService.createGuide(requestPayload).subscribe({
         next: (res) => {
           // Remove loading message
@@ -137,11 +139,11 @@ export class DModifyGuideScreenComponent {
           this.message.success('Guide created successfully!');
         },
         error: (err) => {
-          console.error('Error creating place:', err);
+          console.error('Error creating guide:', err);
           // Remove loading message
           this.message.remove(loadingMessageId);
           // Display error message
-          this.message.error('Error creating place.');
+          this.message.error('Error creating guide.');
           this.isOkLoading = false;
         },
       });

@@ -1,9 +1,6 @@
 ﻿using EchoesOfUzbekistan.Application.Users.Services;
-using EchoesOfUzbekistan.Domain.Users;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.JsonWebTokens;
-using System.Security.Claims;
 
 namespace EchoesOfUzbekistan.Api.Controllers;
 

@@ -4,16 +4,18 @@ using Amazon.S3;
 using EchoesOfUzbekistan.Application.Abstractions.Auth;
 using EchoesOfUzbekistan.Application.Abstractions.Data;
 using EchoesOfUzbekistan.Application.Abstractions.FileHandling;
+using EchoesOfUzbekistan.Application.Abstractions.Payments;
 using EchoesOfUzbekistan.Application.Users.Services;
 using EchoesOfUzbekistan.Domain.Abstractions;
 using EchoesOfUzbekistan.Domain.Common;
-using EchoesOfUzbekistan.Domain.Guides;
+using EchoesOfUzbekistan.Domain.Guides.Repositories;
 using EchoesOfUzbekistan.Domain.Places;
 using EchoesOfUzbekistan.Domain.Users;
 using EchoesOfUzbekistan.Infrastructure.Auth;
 using EchoesOfUzbekistan.Infrastructure.Authorisation;
 using EchoesOfUzbekistan.Infrastructure.Data;
 using EchoesOfUzbekistan.Infrastructure.FileUpload;
+using EchoesOfUzbekistan.Infrastructure.Payments;
 using EchoesOfUzbekistan.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -21,12 +23,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+using Stripe;
+using System.Configuration;
+using TokenService = EchoesOfUzbekistan.Infrastructure.Auth.TokenService;
 
 namespace EchoesOfUzbekistan.Infrastructure;
 public static class DependencyInjection
@@ -49,6 +48,7 @@ public static class DependencyInjection
         services.AddScoped<ILanguageRepository, LanguageRepository>();
         services.AddScoped<IGuideRepository, AudioGuideRepository>();
         services.AddScoped<IPlaceRepository, PlaceRepository>();
+        services.AddScoped<IGuidePurchaseRepository, GuidePurchaseRepository>();
         services.AddScoped<IUnitOfWork>(p => p.GetRequiredService<AppDbContext>());
 
         // AUTHENTICATION
@@ -102,6 +102,14 @@ public static class DependencyInjection
         // AUTHORISATION
         services.AddScoped<AuthorisationService>();
         services.AddTransient<IClaimsTransformation, MyClaimsTransformation>();
+
+
+        // PAYMENT
+        var stripeSecretKey = configuration["Stripe:SecretKey"];
+        services.AddSingleton(x => new StripeClient(stripeSecretKey));
+        StripeConfiguration.ApiKey = stripeSecretKey;
+        services.AddScoped<IPaymentProcessor, StripePaymentProcessor>();
+
 
         return services;
     }

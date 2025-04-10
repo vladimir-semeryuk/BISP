@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="EchoesOfUzbekistan.Domain.Abstractions.Entity">
+    <Position X="10.25" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAgAAAAAAAAAAAAAAAEAAAAAAAAEAAAAAAACAAA=</HashCode>
+      <FileName>Abstractions\Entity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EchoesOfUzbekistan.Domain.Abstractions.Result">
+    <Position X="0.5" Y="3.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAQAAAAAAAAAAAgAAAECAAAAAAIAAAAA=</HashCode>
+      <FileName>Abstractions\Result.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EchoesOfUzbekistan.Domain.Abstractions.Result&lt;TValue&gt;">
+    <Position X="0.5" Y="6.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Abstractions\Result.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EchoesOfUzbekistan.Domain.Common.Language">
+    <Position X="2.25" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAAgAAQAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\Language.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EchoesOfUzbekistan.Domain.Common.LanguageErrors">
+    <Position X="8.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\LanguageErrors.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EchoesOfUzbekistan.Domain.Users.Role">
+    <Position X="8.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACACAAAAAAAAAAAAAAAAQAEAEAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>Users\Role.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EchoesOfUzbekistan.Domain.Users.User">
+    <Position X="16.5" Y="5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAACAAEAAoGQAAAABADgIAEEQAAAABAAAACQE=</HashCode>
+      <FileName>Users\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EchoesOfUzbekistan.Domain.Users.UserErrors">
+    <Position X="13.75" Y="10.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAEIAAAAAAwAIAIAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Users\UserErrors.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EchoesOfUzbekistan.Domain.Guides.AudioGuide">
+    <Position X="11.5" Y="3.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAEAQAgBEAKQgAAAAJAAAAAAEAAIlAGIgAAAIA=</HashCode>
+      <FileName>Guides\AudioGuide.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EchoesOfUzbekistan.Domain.Guides.AudioGuideErrors">
+    <Position X="10.25" Y="9.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>ACEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>Guides\AudioGuideErrors.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EchoesOfUzbekistan.Domain.Guides.AudioGuidePurchase">
+    <Position X="14.75" Y="1.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAAIAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Guides\AudioGuidePurchase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EchoesOfUzbekistan.Domain.Places.Place">
+    <Position X="6.75" Y="1.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAgAEICAAAAAAJAIBAAAAAAIBAGIgAAAIA=</HashCode>
+      <FileName>Places\Place.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EchoesOfUzbekistan.Domain.Friendships.Friendship">
+    <Position X="14.75" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAgAAAAAAAAAAAAQEAAAAAAIAAAAAA=</HashCode>
+      <FileName>Friendships\Friendship.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EchoesOfUzbekistan.Domain.Routes.Route">
+    <Position X="17.5" Y="1.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Routes\Route.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EchoesOfUzbekistan.Domain.Likes.Like">
+    <Position X="20" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAAAAAAgAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Likes\Like.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EchoesOfUzbekistan.Domain.Comments.Comment">
+    <Position X="5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgIAAAAAACAAAAgAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Comments\Comment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EchoesOfUzbekistan.Domain.Reports.InappropriateContentReport">
+    <Position X="8.75" Y="3.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAEAAAAAAIAACAAAAgAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Reports\InappropriateContentReport.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="EchoesOfUzbekistan.Domain.Abstractions.IDomainEvent">
+    <Position X="5.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Abstractions\IDomainEvent.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="EchoesOfUzbekistan.Domain.Abstractions.IUnitOfWork">
+    <Position X="5.5" Y="10" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Abstractions\IUnitOfWork.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="EchoesOfUzbekistan.Domain.Common.ILanguageRepository">
+    <Position X="6.25" Y="11.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>Common\ILanguageRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="EchoesOfUzbekistan.Domain.Users.IUserRepository">
+    <Position X="3.75" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAMAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>Users\IUserRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="EchoesOfUzbekistan.Domain.Guides.Repositories.IGuidePurchaseRepository">
+    <Position X="3.75" Y="11.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Guides\Repositories\IGuidePurchaseRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="EchoesOfUzbekistan.Domain.Guides.Repositories.IGuideRepository">
+    <Position X="5.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAcAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>Guides\Repositories\IGuideRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="EchoesOfUzbekistan.Domain.Places.IPlaceRepository">
+    <Position X="3.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAcAAAACAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>Places\IPlaceRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="EchoesOfUzbekistan.Domain.Guides.GuideStatus">
+    <Position X="10.25" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAEAAAAAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>Guides\GuideStatus.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="EchoesOfUzbekistan.Domain.Places.PlaceStatus">
+    <Position X="12" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAEAAA=</HashCode>
+      <FileName>Places\PlaceStatus.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="EchoesOfUzbekistan.Domain.Reports.ReportStatus">
+    <Position X="8.5" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAiAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Reports\ReportStatus.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

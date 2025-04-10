@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EchoesOfUzbekistan.Domain.Guides;
+namespace EchoesOfUzbekistan.Domain.Guides.Repositories;
 public interface IGuideRepository
 {
     Task<AudioGuide?> GetByIdAsync(Guid id, CancellationToken cancellationToken);

@@ -1,5 +1,6 @@
 ﻿using EchoesOfUzbekistan.Domain.Abstractions;
 using EchoesOfUzbekistan.Domain.Common;
+using EchoesOfUzbekistan.Domain.Friendships;
 using EchoesOfUzbekistan.Domain.Users.Events;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,9 @@ public class User : Entity
     public City? City { get; private set; }
     public AboutMe? AboutMe { get; private set; }
     public string IdentityId { get; private set; } = string.Empty;
-    public IReadOnlyCollection<Role> Roles => _roles.ToList(); 
+    public IReadOnlyCollection<Role> Roles => _roles.ToList();
+    public ICollection<Friendship> Following { get; private set; } = new List<Friendship>();
+    public ICollection<Friendship> Followers { get; private set; } = new List<Friendship>();
 
     private User() { }
 
@@ -70,5 +73,41 @@ public class User : Entity
     public void SetIdentityId(string identityProviderId)
     {
         IdentityId = identityProviderId;
+    }
+
+    public Result Follow(User target)
+    {
+        if (target.Id == this.Id)
+            return Result.Failure(UserErrors.CannotFollowYourself);
+
+        if (IsFollowing(target))
+            return Result.Failure(UserErrors.AlreadyFollow);
+
+        var friendship = new Friendship
+        {
+            Follower = this,
+            Followee = target
+        };
+
+        Following.Add(friendship);
+
+        return Result.Success();
+    }
+
+    public void Unfollow(User target)
+    {
+        var friendship = Following.FirstOrDefault(f => f.FolloweeId == target.Id);
+        if (friendship != null)
+            Following.Remove(friendship);
+    }
+
+    public bool IsFollowing(User target)
+    {
+        return Following.Any(f => f.FolloweeId == target.Id);
+    }
+
+    public bool IsFollowedBy(User target)
+    {
+        return Followers.Any(f => f.FollowerId == target.Id);
     }
 }

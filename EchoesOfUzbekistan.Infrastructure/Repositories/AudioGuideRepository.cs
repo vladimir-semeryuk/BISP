@@ -1,4 +1,5 @@
 ﻿using EchoesOfUzbekistan.Domain.Guides;
+using EchoesOfUzbekistan.Domain.Guides.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

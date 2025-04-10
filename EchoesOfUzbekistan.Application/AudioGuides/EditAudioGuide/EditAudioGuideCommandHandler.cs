@@ -2,6 +2,7 @@
 using EchoesOfUzbekistan.Domain.Abstractions;
 using EchoesOfUzbekistan.Domain.Common;
 using EchoesOfUzbekistan.Domain.Guides;
+using EchoesOfUzbekistan.Domain.Guides.Repositories;
 using EchoesOfUzbekistan.Domain.Users;
 using System;
 using System.Collections.Generic;

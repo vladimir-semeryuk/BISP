@@ -7,21 +7,28 @@ import { OwnContentGuard } from './shared/guards/own-content.guard';
 import { DProfileScreenComponent } from './desktop-app/components/screens/d-profile-screen/d-profile-screen.component';
 import { ExampleFormComponent } from './example-form-component/example-form-component.component';
 import { DModifyGuideScreenComponent } from './desktop-app/components/screens/cms/d-modify-guide-screen/d-modify-guide-screen.component';
+import { DCmsHomeScreenComponent } from './desktop-app/components/screens/cms/d-cms-home-screen/d-cms-home-screen.component';
 
 export const routes: Routes = [
-  { path: '', component: DHomeScreenComponent},
-  { path: 'login', component: DLoginScreenComponent},
-  { path: 'signup', component: DSignupScreenComponent},
+  { path: '', component: DHomeScreenComponent },
+  { path: 'login', component: DLoginScreenComponent },
+  { path: 'signup', component: DSignupScreenComponent },
   {
     path: 'profile',
     component: DProfileScreenComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
-    path: 'text', component: ExampleFormComponent
+    path: 'text',
+    component: ExampleFormComponent,
   },
   {
-    path: 'modify-guide', component: DModifyGuideScreenComponent,
+    path: 'cms/my-guides',
+    component: DCmsHomeScreenComponent
+  },
+  {
+    path: 'modify-guide',
+    component: DModifyGuideScreenComponent,
     canActivate: [AuthGuard]
-  }
+  },
 ];

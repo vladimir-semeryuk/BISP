@@ -1,15 +1,9 @@
-﻿using EchoesOfUzbekistan.Api.Controllers.AudioGuides;
-using EchoesOfUzbekistan.Application.AudioGuides.EditAudioGuide;
-using EchoesOfUzbekistan.Application.AudioGuides.GetAudioGuide;
-using EchoesOfUzbekistan.Application.AudioGuides.GetAudioGuides;
-using EchoesOfUzbekistan.Application.AudioGuides.PostAudioGuide;
-using EchoesOfUzbekistan.Application.Places.GetPlace;
+﻿using EchoesOfUzbekistan.Application.Places.GetPlace;
 using EchoesOfUzbekistan.Application.Places.PostPlace;
 using EchoesOfUzbekistan.Application.Users.Services;
 using EchoesOfUzbekistan.Domain.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EchoesOfUzbekistan.Api.Controllers.Places;
@@ -58,33 +52,4 @@ public class PlacesController : AppControllerBase
 
         return Ok(result.Value);
     }
-
-    //[Authorize]
-    //[HttpPut("update")]
-    //public async Task<IActionResult> UpdatePlace(
-    //    UpdateAudioGuideRequest req,
-    //    CancellationToken cancellationToken)
-    //{
-    //    var command = new EditPlaceCommand(
-    //        req.GuideId,
-    //        req.Title,
-    //        req.Description,
-    //        req.City,
-    //        req.MoneyAmount,
-    //        req.CurrencyCode,
-    //        req.LanguageId,
-    //        req.GuideStatus,
-    //        req.AudioLink,
-    //        req.ImageLink);
-
-    //    Result result = await _sender.Send(command, cancellationToken);
-
-    //    if (result.IsFailure)
-    //    {
-    //        return BadRequest(result.Error);
-    //    }
-
-
-    //    return Ok(result);
-    //}
 }

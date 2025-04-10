@@ -73,7 +73,7 @@ export class PriceInputComponent implements OnInit, ControlValueAccessor {
 
   priceForm!: FormGroup;
 
-  // Callbacks to propagate changes/touches.
+  // Callbacks to pass changes/touches.
   onChange: any = () => {};
   onTouched: any = () => {};
 
@@ -89,7 +89,7 @@ export class PriceInputComponent implements OnInit, ControlValueAccessor {
     );
     this.parentFormContainer.addControl(this.controlTitle, this.priceForm);
 
-    // Propagate any changes from the internal form group.
+    // pass changes from the internal form group.
     this.priceForm.valueChanges.subscribe((value) => {
       this.onChange({ value });
     });
@@ -126,59 +126,3 @@ export class PriceInputComponent implements OnInit, ControlValueAccessor {
   }
 }
 
-// @Component({
-//   selector: 'app-price-input',
-//   imports: [NzSelectModule, NzInputNumberModule, ReactiveFormsModule],
-//   viewProviders: [
-//     {
-//       provide: ControlContainer,
-//       useFactory: () => inject(ControlContainer, {skipSelf: true})
-//     }
-//       ],
-//   templateUrl: './price-input.component.html',
-//   styleUrl: './price-input.component.less'
-// })
-// export class PriceInputComponent implements OnInit, OnDestroy, ControlValueAccessor {
-//   @Input({ required: true }) controlTitle = '';
-//   @Input({required: true}) id = ''
-//   @Input() initialValue = 0
-//   @Input() required: boolean = true;
-//   formControl!: FormGroup;
-
-//   // ControlValueAccessor callbacks.
-//   onChange: any = () => {};
-//   onTouched: any = () => {};
-
-//   parentContainer = inject(ControlContainer)
-
-//   get parentFormContainer(): FormGroup {
-//     return this.parentContainer.control as FormGroup;
-//   }
-
-//   ngOnInit(): void {
-//     this.parentFormContainer.addControl(this.controlTitle,
-//       new FormGroup({
-//         value: new FormControl(this.initialValue, Validators.min(0)),
-//         currency: new FormControl('UZS', Validators.required)
-//       })
-//     )
-//     this.formControl.valueChanges.subscribe(value => this.onChange(value));
-//   }
-
-//   ngOnDestroy(): void {
-//     this.parentFormContainer.removeControl(this.controlTitle)
-//   }
-
-//   writeValue(value: any): void {
-//     this.formControl.setValue(value);
-//   }
-//   registerOnChange(fn: any): void {
-//     this.onChange = fn;
-//   }
-//   registerOnTouched(fn: any): void {
-//     this.onTouched = fn;
-//   }
-//   setDisabledState(isDisabled: boolean): void {
-//     isDisabled ? this.formControl.disable() : this.formControl.enable();
-//   }
-// }

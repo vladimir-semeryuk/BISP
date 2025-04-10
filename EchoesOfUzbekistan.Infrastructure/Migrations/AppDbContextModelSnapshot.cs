@@ -43,6 +43,45 @@ namespace EchoesOfUzbekistan.Infrastructure.Migrations
                     b.ToTable("audio_guide_place", (string)null);
                 });
 
+            modelBuilder.Entity("EchoesOfUzbekistan.Domain.Comments.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("content");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<Guid>("EntityId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("entity_id");
+
+                    b.Property<string>("EntityType")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("entity_type");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_comments");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_comments_user_id");
+
+                    b.ToTable("comments", (string)null);
+                });
+
             modelBuilder.Entity("EchoesOfUzbekistan.Domain.Common.Language", b =>
                 {
                     b.Property<Guid>("Id")
@@ -71,6 +110,41 @@ namespace EchoesOfUzbekistan.Infrastructure.Migrations
                         .HasDatabaseName("ix_languages_code");
 
                     b.ToTable("languages", (string)null);
+                });
+
+            modelBuilder.Entity("EchoesOfUzbekistan.Domain.Friendships.Friendship", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("FollowedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("followed_at");
+
+                    b.Property<Guid>("FolloweeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("followee_id");
+
+                    b.Property<Guid>("FollowerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("follower_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_friendships");
+
+                    b.HasIndex("FolloweeId")
+                        .HasDatabaseName("ix_friendships_followee_id");
+
+                    b.HasIndex("FollowerId", "FolloweeId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_friendships_follower_id_followee_id");
+
+                    b.ToTable("friendships", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_Friendship_NoSelfFollow", "\"follower_id\" <> \"followee_id\"");
+                        });
                 });
 
             modelBuilder.Entity("EchoesOfUzbekistan.Domain.Guides.AudioGuide", b =>
@@ -133,6 +207,63 @@ namespace EchoesOfUzbekistan.Infrastructure.Migrations
                         .HasDatabaseName("ix_audio_guides_original_language_id");
 
                     b.ToTable("audio_guides", (string)null);
+                });
+
+            modelBuilder.Entity("EchoesOfUzbekistan.Domain.Guides.AudioGuidePurchase", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.Property<Guid>("GuideId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("guide_id");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("PurchaseDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("purchase_date");
+
+                    b.HasKey("UserId", "GuideId")
+                        .HasName("pk_audio_guide_purchases");
+
+                    b.HasIndex("GuideId")
+                        .HasDatabaseName("ix_audio_guide_purchases_guide_id");
+
+                    b.ToTable("audio_guide_purchases", (string)null);
+                });
+
+            modelBuilder.Entity("EchoesOfUzbekistan.Domain.Likes.Like", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("EntityId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("entity_id");
+
+                    b.Property<string>("EntityType")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("entity_type");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_likes");
+
+                    b.HasIndex("UserId", "EntityId", "EntityType")
+                        .IsUnique()
+                        .HasDatabaseName("ix_likes_user_id_entity_id_entity_type");
+
+                    b.ToTable("likes", (string)null);
                 });
 
             modelBuilder.Entity("EchoesOfUzbekistan.Domain.Places.Place", b =>
@@ -203,6 +334,47 @@ namespace EchoesOfUzbekistan.Infrastructure.Migrations
                         .HasDatabaseName("ix_place_original_language_id");
 
                     b.ToTable("place", (string)null);
+                });
+
+            modelBuilder.Entity("EchoesOfUzbekistan.Domain.Reports.InappropriateContentReport", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("AudioGuideId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("audio_guide_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("reason");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_inappropriate_content_reports");
+
+                    b.HasIndex("AudioGuideId")
+                        .HasDatabaseName("ix_inappropriate_content_reports_audio_guide_id");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_inappropriate_content_reports_user_id");
+
+                    b.ToTable("inappropriate_content_reports", (string)null);
                 });
 
             modelBuilder.Entity("EchoesOfUzbekistan.Domain.Routes.Route", b =>
@@ -355,6 +527,37 @@ namespace EchoesOfUzbekistan.Infrastructure.Migrations
                         .HasConstraintName("fk_audio_guide_place_place_place_id");
                 });
 
+            modelBuilder.Entity("EchoesOfUzbekistan.Domain.Comments.Comment", b =>
+                {
+                    b.HasOne("EchoesOfUzbekistan.Domain.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_comments_user_user_id");
+                });
+
+            modelBuilder.Entity("EchoesOfUzbekistan.Domain.Friendships.Friendship", b =>
+                {
+                    b.HasOne("EchoesOfUzbekistan.Domain.Users.User", "Followee")
+                        .WithMany("Followers")
+                        .HasForeignKey("FolloweeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_friendships_user_followee_id");
+
+                    b.HasOne("EchoesOfUzbekistan.Domain.Users.User", "Follower")
+                        .WithMany("Following")
+                        .HasForeignKey("FollowerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_friendships_user_follower_id");
+
+                    b.Navigation("Followee");
+
+                    b.Navigation("Follower");
+                });
+
             modelBuilder.Entity("EchoesOfUzbekistan.Domain.Guides.AudioGuide", b =>
                 {
                     b.HasOne("EchoesOfUzbekistan.Domain.Users.User", null)
@@ -451,6 +654,33 @@ namespace EchoesOfUzbekistan.Infrastructure.Migrations
                     b.Navigation("Translations");
                 });
 
+            modelBuilder.Entity("EchoesOfUzbekistan.Domain.Guides.AudioGuidePurchase", b =>
+                {
+                    b.HasOne("EchoesOfUzbekistan.Domain.Guides.AudioGuide", null)
+                        .WithMany()
+                        .HasForeignKey("GuideId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_audio_guide_purchases_audio_guides_guide_id");
+
+                    b.HasOne("EchoesOfUzbekistan.Domain.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_audio_guide_purchases_user_user_id");
+                });
+
+            modelBuilder.Entity("EchoesOfUzbekistan.Domain.Likes.Like", b =>
+                {
+                    b.HasOne("EchoesOfUzbekistan.Domain.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_likes_user_user_id");
+                });
+
             modelBuilder.Entity("EchoesOfUzbekistan.Domain.Places.Place", b =>
                 {
                     b.HasOne("EchoesOfUzbekistan.Domain.Guides.AudioGuide", null)
@@ -525,6 +755,23 @@ namespace EchoesOfUzbekistan.Infrastructure.Migrations
                     b.Navigation("Translations");
                 });
 
+            modelBuilder.Entity("EchoesOfUzbekistan.Domain.Reports.InappropriateContentReport", b =>
+                {
+                    b.HasOne("EchoesOfUzbekistan.Domain.Guides.AudioGuide", null)
+                        .WithMany()
+                        .HasForeignKey("AudioGuideId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_inappropriate_content_reports_audio_guides_audio_guide_id");
+
+                    b.HasOne("EchoesOfUzbekistan.Domain.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_inappropriate_content_reports_user_user_id");
+                });
+
             modelBuilder.Entity("EchoesOfUzbekistan.Domain.Routes.Route", b =>
                 {
                     b.HasOne("EchoesOfUzbekistan.Domain.Guides.AudioGuide", null)
@@ -586,6 +833,13 @@ namespace EchoesOfUzbekistan.Infrastructure.Migrations
             modelBuilder.Entity("EchoesOfUzbekistan.Domain.Guides.AudioGuide", b =>
                 {
                     b.Navigation("Places");
+                });
+
+            modelBuilder.Entity("EchoesOfUzbekistan.Domain.Users.User", b =>
+                {
+                    b.Navigation("Followers");
+
+                    b.Navigation("Following");
                 });
 #pragma warning restore 612, 618
         }

@@ -35,7 +35,7 @@ export class FileUploadComponent {
     if (!isValid) {
       this.message.error(`Invalid file type. Please upload a ${this.fileType.toLowerCase()} file.`);
     }
-    return isValid; // `false` prevents the file from uploading
+    return isValid; // if set to false, file isn't uploaded
   };
 
   customUpload = (item: NzUploadXHRArgs): Subscription => {

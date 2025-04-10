@@ -10,10 +10,13 @@ import {
   getCmsNavLinks,
 } from '../../../../../shared/interfaces/NavLink';
 import { GuideDto } from '../../../../../shared/interfaces/guides/guide-dto';
+import { CommonModule } from '@angular/common';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 @Component({
   selector: 'app-d-cms-home-screen',
-  imports: [NavbarComponent, FooterComponent, NzCardModule],
+  imports: [NavbarComponent, FooterComponent, NzCardModule, CommonModule, NzIconModule, NzButtonModule],
   templateUrl: './d-cms-home-screen.component.html',
   styleUrl: './d-cms-home-screen.component.less',
 })
@@ -36,10 +39,15 @@ export class DCmsHomeScreenComponent {
     this.userService.getUserProfile().subscribe((t) => {
       if (t?.id) {
         this.currentUserId = t.id;
+  
+        this.guideService
+          .getGuides({ createdByUserId: this.currentUserId })
+          .subscribe((guides) => {
+            console.log('User guides:', guides);
+            this.guides = guides;
+          });
       }
     });
-
-    // this.guideService
   }
 
   setNavLinks() {
@@ -47,5 +55,20 @@ export class DCmsHomeScreenComponent {
     const user = this.authService.getUserAuthDetail();
     if (!user) return getCmsNavLinks(null); // should redirect
     return getCmsNavLinks(user!.id);
+  }
+
+  // Settings Button Click
+  onSettings(guide: GuideDto): void {
+    console.log('Settings for guide:', guide);
+  }
+
+  // Edit Button Click
+  onEdit(guide: GuideDto): void {
+    console.log('Edit guide:', guide);
+  }
+
+  // More Button Click
+  onMore(guide: GuideDto): void {
+    console.log('More options for guide:', guide);
   }
 }

@@ -16,6 +16,18 @@ public static class UserErrors
         "User.AuthorFound",
         "The author with the specified id was not found");
 
+    public static readonly Error CannotFollowYourself = new(
+        "User.CannotFollowYourself",
+        "You cannot follow yourself.");
+
+    public static readonly Error AlreadyFollow = new(
+        "User.AlreadyFollow",
+        "You already follow the user.");
+
+    public static readonly Error CannotPostForOthers = new(
+        "User.CannotPostForOthers",
+        "You already cannot post for other users.");
+
     public static readonly Error InvalidCredentials = new(
         "User.InvalidCredentials",
         "The provided credentials were invalid");

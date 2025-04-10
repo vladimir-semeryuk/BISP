@@ -1,14 +1,12 @@
-﻿using EchoesOfUzbekistan.Api.Controllers.Users;
-using EchoesOfUzbekistan.Application.AudioGuides.EditAudioGuide;
+﻿using EchoesOfUzbekistan.Application.AudioGuides.EditAudioGuide;
 using EchoesOfUzbekistan.Application.AudioGuides.GetAudioGuide;
 using EchoesOfUzbekistan.Application.AudioGuides.GetAudioGuides;
 using EchoesOfUzbekistan.Application.AudioGuides.PostAudioGuide;
+using EchoesOfUzbekistan.Application.AudioGuides.PurchaseAudioGuide;
 using EchoesOfUzbekistan.Application.Users.Services;
-using EchoesOfUzbekistan.Application.Users.SignupUser;
 using EchoesOfUzbekistan.Domain.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EchoesOfUzbekistan.Api.Controllers.AudioGuides;
@@ -94,6 +92,15 @@ public class AudioGuidesController : AppControllerBase
             return BadRequest(result.Error);
         }
 
+
+        return Ok(result);
+    }
+
+    [Authorize]
+    [HttpPost("checkout/{guideId}")]
+    public async Task<IActionResult> CreateCheckoutSession(Guid guideId)
+    {
+        var result = await _sender.Send(new PurchaseAudioGuideCommand(guideId));
 
         return Ok(result);
     }
