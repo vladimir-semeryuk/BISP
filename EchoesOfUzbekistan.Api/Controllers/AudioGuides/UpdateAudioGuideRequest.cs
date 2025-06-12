@@ -7,7 +7,8 @@ public record UpdateAudioGuideRequest(
     string City,
     decimal MoneyAmount,
     string CurrencyCode,
-    Guid LanguageId,
-    string GuideStatus,
+    string LanguageCode,
+    string? GuideStatus,
     string? AudioLink,
-    string? ImageLink);
+    string? ImageLink,
+    List<Guid> PlacesIds);

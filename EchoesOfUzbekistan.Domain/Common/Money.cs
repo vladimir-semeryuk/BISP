@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EchoesOfUzbekistan.Domain.Common;
+﻿namespace EchoesOfUzbekistan.Domain.Common;
 public record Money(decimal Amount, Currency Currency)
 {
     public static Money operator +(Money first, Money second)

@@ -6,4 +6,5 @@ public record SignupUserRequest(
     string Surname, 
     string Password, 
     string CountryCode,
-    string CountryName);
+    string CountryName,
+    string? City);

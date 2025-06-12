@@ -1,12 +1,11 @@
-﻿using EchoesOfUzbekistan.Domain.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EchoesOfUzbekistan.Application.Users.LoginUser;
+using EchoesOfUzbekistan.Domain.Abstractions;
 
 namespace EchoesOfUzbekistan.Application.Abstractions.Auth;
 public interface ITokenService
 {
-    Task<Result<string>> GetAccessTokenAsync(string email, string password, CancellationToken cancellationToken = default);
+    Task<Result<TokenResponse>> GetAccessTokenAsync(string email, string password, CancellationToken cancellationToken = default);
+
+    Task<Result<TokenResponse>> RefreshAccessTokenAsync(string refreshToken,
+        CancellationToken cancellationToken = default);
 }

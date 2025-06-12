@@ -1,15 +1,8 @@
 ﻿using EchoesOfUzbekistan.Domain.Users;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.JsonWebTokens;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EchoesOfUzbekistan.Infrastructure.Authorisation;
 internal class MyClaimsTransformation : IClaimsTransformation

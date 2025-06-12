@@ -11,7 +11,7 @@ import { AudioGuideFilter } from '../../shared/interfaces/guides/audio-guide-fil
   providedIn: 'root',
 })
 export class GuideService {
-  private apiUrl = `${environment.apiUrl}/AudioGuides`;
+  public apiUrl = `${environment.apiUrl}/AudioGuides`;
   constructor(private http: HttpClient) {}
 
   // POST: Create a new guides
@@ -49,5 +49,19 @@ export class GuideService {
     }
 
     return this.http.get<GuideDto[]>(`${this.apiUrl}`, { params });
+  }
+
+  getGuidePurchaseStatus(userId: string, guideId: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/payment-status/${guideId}`, {
+      params: { userId }
+    });
+  }
+
+  createCheckoutSession(guideId: string): Observable<string> {
+    return this.http.post<string>(`${this.apiUrl}/checkout/${guideId}`, {});
+  }
+
+  getStreamUrl(guideId: string): string {
+    return `${this.apiUrl}/stream/${guideId}`;
   }
 }

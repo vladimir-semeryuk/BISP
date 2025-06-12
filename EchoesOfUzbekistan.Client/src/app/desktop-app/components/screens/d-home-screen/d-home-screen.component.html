@@ -1,5 +1,4 @@
-<app-navbar [navLinks]="navLinks"
-navbarClass="navbar user-navbar"></app-navbar>
+<app-navbar [mode]="navbarMode"></app-navbar>
 
 <section class="image-section">
   <div class="panel-container">
@@ -21,6 +20,74 @@ navbarClass="navbar user-navbar"></app-navbar>
 
 <section class="top-items">
   <h2>Browse Audio Guides</h2>
+
+  @if (isLoading) {
+    <div class="loading-container">
+      <nz-spin nzSimple></nz-spin>
+    </div>
+  } @else if (hasError) {
+    <p>Error loading guides. Please try again later.</p>
+  } @else if (topItems.length === 0) {
+    <nz-empty
+      nzNotFoundImage="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+      [nzNotFoundContent]="contentTpl"
+      [nzNotFoundFooter]="footerTpl"
+    ></nz-empty>
+  } @else {
+    <div class="grid-container">
+      @for (item of topItems; track item.id) {
+        <div class="guide-card">
+          <a [routerLink]="['/view-guide', item.id]" class="guide-link">
+            <nz-card
+              [nzBordered]="true"
+              nzHoverable
+              [nzTitle]="item.title"
+              [nzExtra]="extraTemplate"
+            >
+              <img [src]="item.imageLink ? item.imageLink : 'fallback.png'" class="card-image" alt="Guide Image" />
+              <div class="card-content">
+                <h3>Hey, it's a placeholder text!</h3>
+                <p>{{ item.description }}</p>
+              </div>
+            </nz-card>
+          </a>
+        </div>
+        <!-- <div class="guide-card">
+          <nz-card
+            [nzBordered]="true"
+            nzHoverable
+            nzTitle="{{ item.title }}"
+            [nzExtra]="extraTemplate"
+          >
+            <img [src]="item.imageLink" class="card-image" alt="Guide Image" />
+            <div class="card-content">
+              <h3>Hey, it's a placeholder text!</h3>
+              <p>
+                {{ item. description }}
+              </p>
+            </div>
+          </nz-card>
+        </div> -->
+      }
+    </div>
+  }
+</section>
+
+<ng-template #extraTemplate>
+  <a>More</a>
+</ng-template>
+
+<ng-template #contentTpl>
+  <span>
+    No audio guides yet. Feel like making one?
+  </span>
+</ng-template>
+
+<ng-template #footerTpl>
+  <a nz-button nzType="primary" [routerLink]="['/modify-guide']">Create Now</a>
+</ng-template>
+<!-- <section class="top-items">
+  <h2>Browse Audio Guides</h2>
   <div class="grid-container">
     <div class="guide-card" *ngFor="let item of topItems">
       <nz-card
@@ -29,14 +96,11 @@ navbarClass="navbar user-navbar"></app-navbar>
         nzTitle="{{ item.title }}"
         [nzExtra]="extraTemplate"
       >
-        <img [src]="item.image" class="card-image" alt="Guide Image" />
+        <img [src]="item.imageLink" class="card-image" alt="Guide Image" />
         <div class="card-content">
-          <h3>{{ item.subtitle }}</h3>
+          <h3>Hey, it's a placeholder text!</h3>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro
-            aperiam voluptates repudiandae laudantium qui. Facere distinctio
-            delectus animi praesentium atque adipisci, ratione temporibus
-            repellendus. Ratione saepe in dolorum cum ea!
+            {{ item. description }}
           </p>
         </div>
       </nz-card>
@@ -46,7 +110,7 @@ navbarClass="navbar user-navbar"></app-navbar>
 
 <ng-template #extraTemplate>
   <a>More</a>
-</ng-template>
+</ng-template> -->
 
 <section class="search-section background-tint">
   <div class="search-group-container">

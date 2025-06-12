@@ -1,9 +1,4 @@
 ﻿using EchoesOfUzbekistan.Domain.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EchoesOfUzbekistan.Infrastructure.Auth.Models;
 internal class UserKeycloakRepresentationModel
@@ -53,10 +48,10 @@ internal class UserKeycloakRepresentationModel
     internal static UserKeycloakRepresentationModel FromUser(User user) =>
         new()
         {
-            FirstName = user.FirstName.value,
-            LastName = user.Surname.value,
-            Email = user.Email.value,
-            Username = user.Email.value,
+            FirstName = user.FirstName.Value,
+            LastName = user.Surname.Value,
+            Email = user.Email.Value,
+            Username = user.Email.Value,
             Enabled = true,
             EmailVerified = true,
             CreatedTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),

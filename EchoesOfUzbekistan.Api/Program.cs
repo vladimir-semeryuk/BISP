@@ -1,11 +1,15 @@
 using EchoesOfUzbekistan.Api.Extensions;
 using EchoesOfUzbekistan.Application;
 using EchoesOfUzbekistan.Infrastructure;
-using Microsoft.AspNetCore.Authentication;
 
 DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration.AddJsonFile(
+    Path.Combine(builder.Environment.ContentRootPath, "Config/voice-mappings.json"),
+    optional: false,
+    reloadOnChange: false);
 
 // Add services to the container.
 
@@ -15,7 +19,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddInfrastructure(builder, builder.Configuration);
 
 // Temporary cors settings to test the front-end application
 builder.Services.AddCors(options =>
@@ -24,8 +28,9 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy.WithOrigins(new string[] { "http://localhost:4200", "http://172.26.112.1:5000/" }) // Allow requests from this origin
-                  .AllowAnyHeader()                     // Allow any headers
-                  .AllowAnyMethod();                    // Allow any HTTP methods
+                  .AllowAnyHeader()
+                  .AllowCredentials()
+                  .AllowAnyMethod();
         });
 });
 

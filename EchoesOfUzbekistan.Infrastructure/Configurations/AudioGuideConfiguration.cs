@@ -42,31 +42,31 @@ public class AudioGuideConfiguration : IEntityTypeConfiguration<AudioGuide>
             .IsRequired(false);
 
         builder.Property(ag => ag.City)
-            .HasConversion(city => city != null ? city.value : null, city => city != null ? new City(city) : null)
+            .HasConversion(city => city != null ? city.Value : null, city => city != null ? new City(city) : null)
             .IsRequired(false);
 
         builder.Property(ag => ag.AudioLink)
-            .HasConversion(audio => audio != null ? audio.value : null, link => link != null ? new ResourceLink(link) : null)
+            .HasConversion(audio => audio != null ? audio.Value : null, link => link != null ? new ResourceLink(link) : null)
             .IsRequired(false);
 
         builder.Property(ag => ag.ImageLink)
-            .HasConversion(img => img != null ? img.value : null, link => link != null ? new ResourceLink(link) : null)
+            .HasConversion(img => img != null ? img.Value : null, link => link != null ? new ResourceLink(link) : null)
             .IsRequired(false);
 
         builder.OwnsMany(ag => ag.Translations, translation =>
         {
             translation.WithOwner().HasForeignKey(t => t.AudioGuideId);
             translation.Property(t => t.AudioGuideId).IsRequired();
-            translation.Property(t => t.title).HasConversion(
+            translation.Property(t => t.Title).HasConversion(
                 v => v.ToString(),
                 v => new GuideTitle(v));
-            translation.Property(ag => ag.audioLink)
-                .HasConversion(audio => audio != null ? audio.value : null, 
+            translation.Property(ag => ag.AudioLink)
+                .HasConversion(audio => audio != null ? audio.Value : null, 
                                link => link != null ? new ResourceLink(link) : null);
             translation.HasOne<Language>()
             .WithMany()
-            .HasForeignKey(t => t.languageId);
-            translation.Property(t => t.description).HasConversion(
+            .HasForeignKey(t => t.LanguageId);
+            translation.Property(t => t.Description).HasConversion(
                 v => v == null ? null : v.ToString(),
                 v => v == null ? null : new GuideInfo(v));
         });
@@ -83,8 +83,9 @@ public class AudioGuideConfiguration : IEntityTypeConfiguration<AudioGuide>
             .HasForeignKey(ag => ag.AuthorId);
 
         builder
-            .HasMany<Place>()
-            .WithMany();
+            .HasMany(a => a.Places)
+            .WithMany(p => p.Guides)
+            .UsingEntity(j => j.ToTable("audio_guide_place"));
 
         builder.ToTable("audio_guides");
     }

@@ -7,6 +7,7 @@ public class Like : Entity
     public Guid EntityId { get; private set; }
     public string EntityType { get; private set; }
 
+    private Like() {} 
     public Like(Guid userId, Guid entityId, string entityType)
     {
         Id = Guid.NewGuid();

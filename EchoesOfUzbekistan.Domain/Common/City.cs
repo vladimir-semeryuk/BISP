@@ -1,8 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace EchoesOfUzbekistan.Domain.Common;
+public record City
+{
+    public string Value { get; }
 
-namespace EchoesOfUzbekistan.Domain.Common;
-public record City(string value);
+    public City(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            throw new ArgumentException("City cannot be empty.", nameof(value));
+
+        Value = value.Trim();
+    }
+
+    public override string ToString() => Value;
+}

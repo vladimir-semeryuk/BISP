@@ -3,11 +3,6 @@ using EchoesOfUzbekistan.Application.Abstractions.Messages;
 using EchoesOfUzbekistan.Domain.Abstractions;
 using EchoesOfUzbekistan.Domain.Common;
 using EchoesOfUzbekistan.Domain.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EchoesOfUzbekistan.Application.Users.SignupUser;
 internal class SignupUserCommandHandler : ICommandHandler<SignupUserCommand, Guid>
@@ -34,14 +29,21 @@ internal class SignupUserCommandHandler : ICommandHandler<SignupUserCommand, Gui
             new FirstName(request.FirstName),
             new Surname(request.Surname),
             new Email(request.Email),
-            new Country(request.CountryName, request.CountryCode));
+            new Country(request.CountryName, request.CountryCode),
+            string.IsNullOrWhiteSpace(request.City) ? null : new City(request.City));
 
-        string identityProviderId = await _authenticationService.Signup(
-            user,
-            request.Password,
-            cancellationToken);
-
-        user.SetIdentityId(identityProviderId);
+        try
+        {
+            string identityProviderId = await _authenticationService.Signup(
+                user,
+                request.Password,
+                cancellationToken);
+            user.SetIdentityId(identityProviderId);
+        }
+        catch (Exception ex)
+        {
+            return Result.Failure<Guid>(UserErrors.InvalidCredentials);
+        }
 
         _userRepository.Add(user);
 

@@ -1,8 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace EchoesOfUzbekistan.Domain.Users;
+public sealed record FirstName
+{
+    public string Value { get; }
 
-namespace EchoesOfUzbekistan.Domain.Users;
-public sealed record FirstName(string value);
+    public FirstName(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            throw new ArgumentException("First name cannot be empty.", nameof(value));
+
+        Value = value.Trim();
+    }
+
+    public override string ToString() => Value;
+}

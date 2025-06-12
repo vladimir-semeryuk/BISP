@@ -1,5 +1,8 @@
 import { Component, inject } from '@angular/core';
-import { NavbarComponent } from '../../../../../shared/components/navbar/navbar.component';
+import {
+  NavbarComponent,
+  NavbarMode,
+} from '../../../../../shared/components/navbar/navbar.component';
 import { FooterComponent } from '../../../../../shared/components/footer/footer.component';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { AuthService } from '../../../../../services/auth.service';
@@ -16,7 +19,14 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 
 @Component({
   selector: 'app-d-cms-home-screen',
-  imports: [NavbarComponent, FooterComponent, NzCardModule, CommonModule, NzIconModule, NzButtonModule],
+  imports: [
+    NavbarComponent,
+    FooterComponent,
+    NzCardModule,
+    CommonModule,
+    NzIconModule,
+    NzButtonModule,
+  ],
   templateUrl: './d-cms-home-screen.component.html',
   styleUrl: './d-cms-home-screen.component.less',
 })
@@ -24,7 +34,8 @@ export class DCmsHomeScreenComponent {
   authService = inject(AuthService);
   currentUserId: string = '';
   navLinks: NavLink[] | null = [];
-  guides: GuideDto[] = []
+  navbarMode = NavbarMode.CMS;
+  guides: GuideDto[] = [];
 
   constructor(
     private guideService: GuideService,
@@ -34,12 +45,11 @@ export class DCmsHomeScreenComponent {
   }
 
   ngOnInit(): void {
-    this.navLinks = this.setNavLinks();
 
     this.userService.getUserProfile().subscribe((t) => {
       if (t?.id) {
         this.currentUserId = t.id;
-  
+
         this.guideService
           .getGuides({ createdByUserId: this.currentUserId })
           .subscribe((guides) => {
@@ -48,13 +58,6 @@ export class DCmsHomeScreenComponent {
           });
       }
     });
-  }
-
-  setNavLinks() {
-    if (!this.authService.isLoggedIn()) return getCmsNavLinks(null);
-    const user = this.authService.getUserAuthDetail();
-    if (!user) return getCmsNavLinks(null); // should redirect
-    return getCmsNavLinks(user!.id);
   }
 
   // Settings Button Click

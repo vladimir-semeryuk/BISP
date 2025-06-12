@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EchoesOfUzbekistan.Infrastructure.Auth;
+﻿namespace EchoesOfUzbekistan.Infrastructure.Auth;
 internal class KeycloakOptions
 {
     public string AdminUrl { get; set; } = string.Empty;

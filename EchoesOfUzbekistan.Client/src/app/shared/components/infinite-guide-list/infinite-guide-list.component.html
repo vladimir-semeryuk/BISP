@@ -1,0 +1,24 @@
+<div>
+    @if (isLoading) {
+      <div class="loading-container">
+        <nz-spin nzSimple></nz-spin>
+      </div>
+    } @else if (hasNoGuides) {
+      <nz-empty nzNotFoundContent="This user hasn't liked any guides yet"></nz-empty>
+    } @else {
+      <cdk-virtual-scroll-viewport itemSize="73" class="infinite-container">
+        <nz-list>
+          <nz-list-item *cdkVirtualFor="let guide of guides">
+            <nz-list-item-meta
+              [nzAvatar]="guide.imageLink || 'fallback.png'"
+              [nzDescription]="guide.city"
+            >
+              <nz-list-item-meta-title>
+                <a [routerLink]="['/view-guide', guide.id]">{{ guide.title }}</a>
+              </nz-list-item-meta-title>
+            </nz-list-item-meta>
+          </nz-list-item>
+        </nz-list>
+      </cdk-virtual-scroll-viewport>
+    }
+  </div>

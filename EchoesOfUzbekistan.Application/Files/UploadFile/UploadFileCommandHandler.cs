@@ -3,13 +3,6 @@ using EchoesOfUzbekistan.Application.Abstractions.Messages;
 using EchoesOfUzbekistan.Application.Files.Services.FileNamingStrategies;
 using EchoesOfUzbekistan.Application.Users.Services;
 using EchoesOfUzbekistan.Domain.Abstractions;
-using EchoesOfUzbekistan.Domain.Users;
-using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EchoesOfUzbekistan.Application.Files.UploadFile;
 internal class UploadFileCommandHandler : ICommandHandler<UploadFileCommand, FileResponse>
@@ -28,10 +21,6 @@ internal class UploadFileCommandHandler : ICommandHandler<UploadFileCommand, Fil
         try
         {
             var userId = _userContext.UserId;
-            //if (userId == null)
-            //{
-            //    return Result.Failure<FileResponse>(UserErrors.NotFound);
-            //}
             
             Guid fileId = Guid.NewGuid();
             var strategy = FileNamingStrategyFactory.GetStrategy(request.EntityType);

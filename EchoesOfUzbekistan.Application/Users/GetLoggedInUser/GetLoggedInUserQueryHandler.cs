@@ -1,52 +1,43 @@
-﻿using System.Data;
-using EchoesOfUzbekistan.Application.Abstractions.Auth;
-using EchoesOfUzbekistan.Application.Abstractions.Data;
-using EchoesOfUzbekistan.Domain.Abstractions;
-using Dapper;
+﻿using EchoesOfUzbekistan.Domain.Abstractions;
+using EchoesOfUzbekistan.Application.Abstractions.FileHandling;
 using EchoesOfUzbekistan.Application.Abstractions.Messages;
 using EchoesOfUzbekistan.Application.Users.GetUser;
+using EchoesOfUzbekistan.Application.Users.Interfaces;
 using EchoesOfUzbekistan.Application.Users.Services;
+using EchoesOfUzbekistan.Domain.Users;
 
 namespace EchoesOfUzbekistan.Application.Users.GetLoggedInUser;
 
 internal sealed class GetLoggedInUserQueryHandler
     : IQueryHandler<GetLoggedInUserQuery, UserResponse>
 {
-    private readonly ISQLConnectionFactory _sqlConnectionFactory;
+    private readonly IUserReadRepository _userReadRepository;
     private readonly IUserContextService _userContext;
+    private readonly IFileService _fileService;
 
     public GetLoggedInUserQueryHandler(
-        ISQLConnectionFactory sqlConnectionFactory,
-        IUserContextService userContext)
+        IUserContextService userContext, IFileService fileService, IUserReadRepository userReadRepository)
     {
-        _sqlConnectionFactory = sqlConnectionFactory;
         _userContext = userContext;
+        _fileService = fileService;
+        _userReadRepository = userReadRepository;
     }
 
     public async Task<Result<UserResponse>> Handle(
         GetLoggedInUserQuery request,
         CancellationToken cancellationToken)
     {
-        using IDbConnection connection = _sqlConnectionFactory.GetDbConnection();
+        var user = await _userReadRepository.GetByIdentityIdAsync(_userContext.IdentityId, cancellationToken);
 
-        var sql = @"SELECT id AS Id,
-                    first_name AS FirstName,
-                    surname AS Surname,
-                    email AS Email,
-                    registration_date_utc AS RegistrationDateUtc, 
-                    country_name AS CountryName,
-                    country_iso_code AS CountryCode,
-                    city AS City,
-                    about_me AS AboutMe
-                    FROM users
-                    WHERE identity_id = @IdentityId;";
+        if (user == null)
+        {
+            return Result.Failure<UserResponse>(UserErrors.NotFound);
+        }
 
-        UserResponse user = await connection.QuerySingleAsync<UserResponse>(
-            sql,
-            new
-            {
-                _userContext.IdentityId
-            });
+        if (user.ImageKey != null)
+        {
+            user.ImageLink = await _fileService.GetPresignedUrlForGetAsync(user.ImageKey, cancellationToken);
+        }
 
         return user;
     }

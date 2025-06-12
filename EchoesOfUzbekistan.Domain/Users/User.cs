@@ -1,13 +1,8 @@
 ﻿using EchoesOfUzbekistan.Domain.Abstractions;
 using EchoesOfUzbekistan.Domain.Common;
 using EchoesOfUzbekistan.Domain.Friendships;
+using EchoesOfUzbekistan.Domain.Guides.Events;
 using EchoesOfUzbekistan.Domain.Users.Events;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EchoesOfUzbekistan.Domain.Users;
 public class User : Entity
@@ -23,6 +18,7 @@ public class User : Entity
     public City? City { get; private set; }
     public AboutMe? AboutMe { get; private set; }
     public string IdentityId { get; private set; } = string.Empty;
+    public ResourceLink? ImageLink { get; private set; } = null;
     public IReadOnlyCollection<Role> Roles => _roles.ToList();
     public ICollection<Friendship> Following { get; private set; } = new List<Friendship>();
     public ICollection<Friendship> Followers { get; private set; } = new List<Friendship>();
@@ -35,23 +31,25 @@ public class User : Entity
         Surname surname, 
         Email email, 
         DateTime registrationDateUtc,
-        Country country) : base(id)
+        Country country,
+        City? city) : base(id)
     {
         FirstName = firstName;
         Surname = surname;
         Email = email;
         RegistrationDateUtc = registrationDateUtc;
         Country = country;
+        City = city;
     }
 
-    public static User Create(FirstName firstName, Surname surname, Email email, Country country)
+    public static User Create(FirstName firstName, Surname surname, Email email, Country country, City? city)
     {
-        return Create(firstName, surname, email, country, Role.OrdinaryUser);
+        return Create(firstName, surname, email, country, city, Role.OrdinaryUser);
     }
 
-    public static User Create(FirstName firstName, Surname surname, Email email, Country country, Role role)
+    public static User Create(FirstName firstName, Surname surname, Email email, Country country, City? city, Role role)
     {
-        var user = new User(Guid.NewGuid(), firstName, surname, email, DateTime.UtcNow, country);
+        var user = new User(Guid.NewGuid(), firstName, surname, email, DateTime.UtcNow, country, city);
 
         user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id));
         user._roles.Add(role);
@@ -59,16 +57,68 @@ public class User : Entity
         return user;
     }
 
-    public static User CreateAdmin(FirstName firstName, Surname surname, Email email, Country country)
+    public static User CreateAdmin(FirstName firstName, Surname surname, Email email, City? city, Country country)
     {
-        return Create(firstName, surname, email, country, Role.Administrator);
+        return Create(firstName, surname, email, country, city, Role.Administrator);
     }
 
-    public static User CreateModerator(FirstName firstName, Surname surname, Email email, Country country)
+    public static User CreateModerator(FirstName firstName, Surname surname, Email email, City? city, Country country)
     {
-        return Create(firstName, surname, email, country, Role.Moderator);
+        return Create(firstName, surname, email, country, city, Role.Moderator);
     }
 
+    public void UpdateProfile(
+        FirstName? firstName,
+        Surname? surname,
+        AboutMe? aboutMe,
+        Country? country,
+        City? city)
+    {
+        if (firstName is not null)
+            FirstName = firstName;
+
+        if (surname is not null)
+            Surname = surname;
+
+        AboutMe = aboutMe;
+
+        if (country is not null)
+            Country = country;
+
+        if (city is not null)
+            City = city;
+    }
+
+    public Result UpdateProfilePicture(ResourceLink newImageLink)
+    {
+        if (newImageLink == null || string.IsNullOrWhiteSpace(newImageLink.Value))
+            return Result.Failure(UserErrors.UpdateImageWithNullImageLink);
+
+        var oldImage = ImageLink;
+        ImageLink = newImageLink;
+
+        if (oldImage != null) 
+            RaiseDomainEvent(new UserProfilePictureUpdatedDomainEvent(Id, oldImage.Value, newImageLink.Value));
+
+        return Result.Success();
+    }
+
+    public Result ClearProfilePicture()
+    {
+        if (this.ImageLink != null)
+            RaiseDomainEvent(new EntityFileResourceDeletedEvent(this.ImageLink.Value));
+        ImageLink = null;
+
+        return Result.Success();
+    }
+
+    public Result Delete()
+    {
+        if (this.ImageLink!=null)
+            RaiseDomainEvent(new EntityFileResourceDeletedEvent(ImageLink.Value));
+
+        return Result.Success();
+    }
 
     public void SetIdentityId(string identityProviderId)
     {
@@ -83,22 +133,25 @@ public class User : Entity
         if (IsFollowing(target))
             return Result.Failure(UserErrors.AlreadyFollow);
 
-        var friendship = new Friendship
-        {
-            Follower = this,
-            Followee = target
-        };
+        var friendship = new Friendship(this, target);
 
         Following.Add(friendship);
 
         return Result.Success();
     }
 
-    public void Unfollow(User target)
+    public Result Unfollow(User target)
     {
+        if (target.Id == this.Id)
+            return Result.Failure(UserErrors.CannotUnfollowYourself);
+
         var friendship = Following.FirstOrDefault(f => f.FolloweeId == target.Id);
-        if (friendship != null)
-            Following.Remove(friendship);
+        if (friendship == null)
+            return Result.Failure(UserErrors.FollowNotFound);
+
+        Following.Remove(friendship);
+
+        return Result.Success();
     }
 
     public bool IsFollowing(User target)

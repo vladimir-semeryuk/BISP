@@ -1,9 +1,4 @@
-﻿using EchoesOfUzbekistan.Application.Places.GetPlace;
-using EchoesOfUzbekistan.Domain.Common;
-using EchoesOfUzbekistan.Domain.Guides;
-using EchoesOfUzbekistan.Domain.Places;
-
-namespace EchoesOfUzbekistan.Application.AudioGuides.GetAudioGuide;
+﻿namespace EchoesOfUzbekistan.Application.AudioGuides.GetAudioGuide;
 
 public abstract class AudioGuideBaseResponse
 {
@@ -18,8 +13,8 @@ public abstract class AudioGuideBaseResponse
     public DateTime? DateEdited { get; init; }
     public Guid AuthorId { get; init; }
     public Guid OriginalLanguageId { get; init; }
-    public string? AudioLink { get; init; } = null;
-    public string? ImageLink { get; init; } = null;
-    public string? AudioUrl { get; set; } = null;
-    public string? ImageUrl { get; set; } = null;
+    public string? AudioKey { get; init; }
+    public string? ImageKey { get; init; }
+    public string? AudioLink { get; internal set; } = null;
+    public string? ImageLink { get; internal set; } = null;
 }

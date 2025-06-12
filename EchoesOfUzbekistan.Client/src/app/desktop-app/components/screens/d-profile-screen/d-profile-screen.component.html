@@ -1,5 +1,4 @@
-<app-navbar [navLinks]="navLinks"
-navbarClass="navbar user-navbar"></app-navbar>
+<app-navbar [mode]="navbarMode"></app-navbar>
 
 <hr>
 
@@ -18,25 +17,38 @@ navbarClass="navbar user-navbar"></app-navbar>
                   {{ user.countryName }}@if (user.city) {, {{ user.city }} }
                 </p>
               } @else {
-                <p>Loading profile details…</p>
+                <nz-skeleton [nzAvatar]="false" [nzParagraph]="{ rows: 3 }"></nz-skeleton>
               }
-              <!-- <h2 class="profile-name">Name Surname</h2>
-              <p class="profile-email">name.surnamATgmail.com</p>
-              <p class="profile-location">Uzbekistan, Tashkent</p> -->
             </div>
             <div class="friends-count-info">
-              <h2>21</h2>
-              <p>Friends</p>
+              @if (userProfile$ | async; as user) {
+                <h2>21</h2>
+                <p>friends</p>
+              } @else {
+                <nz-skeleton [nzAvatar]="false" [nzParagraph]="{ rows: 1 }"></nz-skeleton>
+              }
             </div>
           </div>
           <div class="profile-buttons">
-            <button nz-button class="btn chat-btn" [nzType]="'default'">
-              <nz-icon nzType="message" />
-              Chat
-            </button>
-            <button nz-button class="btn add-friend-btn" [nzType]="'primary'">+ Add Friend</button>
-            <!-- <button class="btn chat-btn">Chat</button> -->
-            <!-- <button class="btn add-friend-btn">+ Add Friend</button> -->
+            @if (userProfile$ | async; as user) {
+              @if (isOwnProfile) {
+                <button nz-button nzType="primary" class="btn edit-profile-btn">
+                  <i nz-icon nzType="edit" nzTheme="outline"></i>
+                  Edit Profile
+                </button>
+              } @else {
+                <button nz-button nzType="default" class="btn chat-btn">
+                  <i nz-icon nzType="message" nzTheme="outline"></i>
+                  Chat
+                </button>
+                <button nz-button nzType="primary" class="btn add-friend-btn">
+                  <i nz-icon nzType="user-add" nzTheme="outline"></i>
+                  + Add Friend
+                </button>
+              }
+            } @else {
+              <nz-skeleton [nzAvatar]="false" [nzParagraph]="{ rows: 1 }"></nz-skeleton>
+            }
           </div>
         </div>
       </div>
@@ -50,16 +62,17 @@ navbarClass="navbar user-navbar"></app-navbar>
             @else { <i>The user has not provided any description... Message him to find out more!</i> }
           </p>
         } @else {
-          <p>Loading description</p>
+          <nz-skeleton [nzAvatar]="false" [nzParagraph]="{ rows: 2 }"></nz-skeleton>
         }
       </div>
       <div class="card liked-guides">
         <h3>Guides I Like</h3>
         <div class="divider"></div>
-        <p>
-          Curabitur at elit eget nisi tristique sollicitudin. Aliquam in ultrices
-          orci. Maecenas eu felis eu justo consectetur dictum.
-        </p>
+        @if (userProfile$ | async; as user) {
+          <app-infinite-guide-list [userId]="user.id"></app-infinite-guide-list>
+        } @else {
+          <nz-spin nzSimple></nz-spin>
+        }
       </div>
 
       <!-- Right Column -->

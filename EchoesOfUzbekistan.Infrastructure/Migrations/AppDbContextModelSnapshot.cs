@@ -26,19 +26,19 @@ namespace EchoesOfUzbekistan.Infrastructure.Migrations
 
             modelBuilder.Entity("AudioGuidePlace", b =>
                 {
-                    b.Property<Guid>("AudioGuideId")
+                    b.Property<Guid>("GuidesId")
                         .HasColumnType("uuid")
-                        .HasColumnName("audio_guide_id");
+                        .HasColumnName("guides_id");
 
-                    b.Property<Guid>("PlaceId")
+                    b.Property<Guid>("PlacesId")
                         .HasColumnType("uuid")
-                        .HasColumnName("place_id");
+                        .HasColumnName("places_id");
 
-                    b.HasKey("AudioGuideId", "PlaceId")
+                    b.HasKey("GuidesId", "PlacesId")
                         .HasName("pk_audio_guide_place");
 
-                    b.HasIndex("PlaceId")
-                        .HasDatabaseName("ix_audio_guide_place_place_id");
+                    b.HasIndex("PlacesId")
+                        .HasDatabaseName("ix_audio_guide_place_places_id");
 
                     b.ToTable("audio_guide_place", (string)null);
                 });
@@ -273,10 +273,6 @@ namespace EchoesOfUzbekistan.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid?>("AudioGuideId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("audio_guide_id");
-
                     b.Property<string>("AudioLink")
                         .HasColumnType("text")
                         .HasColumnName("audio_link");
@@ -323,9 +319,6 @@ namespace EchoesOfUzbekistan.Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_place");
-
-                    b.HasIndex("AudioGuideId")
-                        .HasDatabaseName("ix_place_audio_guide_id");
 
                     b.HasIndex("AuthorId")
                         .HasDatabaseName("ix_place_author_id");
@@ -468,6 +461,10 @@ namespace EchoesOfUzbekistan.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("identity_id");
 
+                    b.Property<string>("ImageLink")
+                        .HasColumnType("text")
+                        .HasColumnName("image_link");
+
                     b.Property<DateTime>("RegistrationDateUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("registration_date_utc");
@@ -514,17 +511,17 @@ namespace EchoesOfUzbekistan.Infrastructure.Migrations
                 {
                     b.HasOne("EchoesOfUzbekistan.Domain.Guides.AudioGuide", null)
                         .WithMany()
-                        .HasForeignKey("AudioGuideId")
+                        .HasForeignKey("GuidesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_audio_guide_place_audio_guide_audio_guide_id");
+                        .HasConstraintName("fk_audio_guide_place_audio_guide_guides_id");
 
                     b.HasOne("EchoesOfUzbekistan.Domain.Places.Place", null)
                         .WithMany()
-                        .HasForeignKey("PlaceId")
+                        .HasForeignKey("PlacesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_audio_guide_place_place_place_id");
+                        .HasConstraintName("fk_audio_guide_place_place_places_id");
                 });
 
             modelBuilder.Entity("EchoesOfUzbekistan.Domain.Comments.Comment", b =>
@@ -611,19 +608,19 @@ namespace EchoesOfUzbekistan.Infrastructure.Migrations
 
                             NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
 
-                            b1.Property<string>("audioLink")
+                            b1.Property<string>("AudioLink")
                                 .HasColumnType("text")
                                 .HasColumnName("audio_link");
 
-                            b1.Property<string>("description")
+                            b1.Property<string>("Description")
                                 .HasColumnType("text")
                                 .HasColumnName("description");
 
-                            b1.Property<Guid>("languageId")
+                            b1.Property<Guid>("LanguageId")
                                 .HasColumnType("uuid")
                                 .HasColumnName("language_id");
 
-                            b1.Property<string>("title")
+                            b1.Property<string>("Title")
                                 .IsRequired()
                                 .HasColumnType("text")
                                 .HasColumnName("title");
@@ -631,7 +628,7 @@ namespace EchoesOfUzbekistan.Infrastructure.Migrations
                             b1.HasKey("AudioGuideId", "Id")
                                 .HasName("pk_guide_translation");
 
-                            b1.HasIndex("languageId")
+                            b1.HasIndex("LanguageId")
                                 .HasDatabaseName("ix_guide_translation_language_id");
 
                             b1.ToTable("guide_translation", (string)null);
@@ -642,7 +639,7 @@ namespace EchoesOfUzbekistan.Infrastructure.Migrations
 
                             b1.HasOne("EchoesOfUzbekistan.Domain.Common.Language", null)
                                 .WithMany()
-                                .HasForeignKey("languageId")
+                                .HasForeignKey("LanguageId")
                                 .OnDelete(DeleteBehavior.Cascade)
                                 .IsRequired()
                                 .HasConstraintName("fk_guide_translation_language_language_id");
@@ -683,11 +680,6 @@ namespace EchoesOfUzbekistan.Infrastructure.Migrations
 
             modelBuilder.Entity("EchoesOfUzbekistan.Domain.Places.Place", b =>
                 {
-                    b.HasOne("EchoesOfUzbekistan.Domain.Guides.AudioGuide", null)
-                        .WithMany("Places")
-                        .HasForeignKey("AudioGuideId")
-                        .HasConstraintName("fk_place_audio_guide_audio_guide_id");
-
                     b.HasOne("EchoesOfUzbekistan.Domain.Users.User", null)
                         .WithMany()
                         .HasForeignKey("AuthorId")
@@ -828,11 +820,6 @@ namespace EchoesOfUzbekistan.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_role_user_user_users_id");
-                });
-
-            modelBuilder.Entity("EchoesOfUzbekistan.Domain.Guides.AudioGuide", b =>
-                {
-                    b.Navigation("Places");
                 });
 
             modelBuilder.Entity("EchoesOfUzbekistan.Domain.Users.User", b =>

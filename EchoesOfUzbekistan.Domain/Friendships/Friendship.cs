@@ -1,10 +1,5 @@
 ﻿using EchoesOfUzbekistan.Domain.Abstractions;
 using EchoesOfUzbekistan.Domain.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EchoesOfUzbekistan.Domain.Friendships;
 public class Friendship : Entity
@@ -14,4 +9,22 @@ public class Friendship : Entity
     public Guid FolloweeId { get; set; }
     public User Followee { get; set; }
     public DateTime FollowedAt { get; set; } = DateTime.UtcNow;
+
+    public Friendship(User follower, User followee)
+    {
+        if (follower.Id == followee.Id)
+        {
+            return;
+        }
+
+        FolloweeId = followee.Id;
+        FollowerId = follower.Id;
+        Follower = follower;
+        Followee = followee;
+        FollowedAt = DateTime.UtcNow;
+    }
+    private Friendship()
+    {
+        
+    }
 }

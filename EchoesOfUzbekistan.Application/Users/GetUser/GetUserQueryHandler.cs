@@ -1,44 +1,27 @@
-﻿using Dapper;
-using EchoesOfUzbekistan.Application.Abstractions.Data;
+﻿using EchoesOfUzbekistan.Application.Abstractions.FileHandling;
 using EchoesOfUzbekistan.Application.Abstractions.Messages;
-using EchoesOfUzbekistan.Application.AudioGuides.GetAudioGuide;
+using EchoesOfUzbekistan.Application.Users.Interfaces;
 using EchoesOfUzbekistan.Domain.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EchoesOfUzbekistan.Application.Users.GetUser;
 public class GetUserQueryHandler : IQueryHandler<GetUserQuery, UserResponse>
 {
-    private readonly ISQLConnectionFactory _connectionFactory;
+    private readonly IUserReadRepository _userReadRepository;
+    private readonly IFileService _fileService;
 
-    public GetUserQueryHandler(ISQLConnectionFactory connectionFactory)
+    public GetUserQueryHandler(IFileService fileService, IUserReadRepository userReadRepository)
     {
-        _connectionFactory = connectionFactory;
+        _fileService = fileService;
+        _userReadRepository = userReadRepository;
     }
 
     public async Task<Result<UserResponse>> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
-        using var connection = _connectionFactory.GetDbConnection();
-        var sql = @"SELECT id AS Id,
-                    first_name AS FirstName,
-                    surname AS Surname,
-                    email AS Email,
-                    registration_date_utc AS RegistrationDateUtc, 
-                    country_name AS CountryName,
-                    country_iso_code AS CountryCode,
-                    city AS City,
-                    about_me AS AboutMe
-                    FROM users
-                    WHERE id = @userId;";
-        var user = await connection.QueryFirstOrDefaultAsync<UserResponse>(
-            sql,
-            new
-            {
-                request.userId
-            });
+        var user = await _userReadRepository.GetByIdAsync(request.userId, cancellationToken);
+        if (user != null && user.ImageKey != null)
+        {
+            user.ImageLink = await _fileService.GetPresignedUrlForGetAsync(user.ImageKey, cancellationToken);
+        }
         return user;
     }
 }

@@ -1,10 +1,4 @@
 ﻿using EchoesOfUzbekistan.Application.Abstractions.Messages;
-using EchoesOfUzbekistan.Domain.Guides;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EchoesOfUzbekistan.Application.AudioGuides.EditAudioGuide;
 public record EditAudioGuideCommand(
@@ -14,8 +8,9 @@ public record EditAudioGuideCommand(
     string City,
     decimal MoneyAmount,
     string CurrencyCode,
-    Guid LanguageId,
-    string GuideStatus,
+    string LanguageCode,
+    string? GuideStatus,
     string? AudioLink,
-    string? ImageLink
+    string? ImageLink,
+    List<Guid> PlacesIds
     ) : ICommand;

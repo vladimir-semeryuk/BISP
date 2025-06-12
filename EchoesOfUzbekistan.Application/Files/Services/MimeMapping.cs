@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EchoesOfUzbekistan.Application.Files.Services.FileNamingStrategies;
+﻿using EchoesOfUzbekistan.Application.Files.Services.FileNamingStrategies;
 
 namespace EchoesOfUzbekistan.Application.Files.Services;
 public static class MimeMapping
@@ -13,7 +8,8 @@ public static class MimeMapping
          {"image/png", FileCategories.Image},
          {"image/jpeg", FileCategories.Image},
          {"audio/mpeg", FileCategories.Audio},
-         {"audio/wav", FileCategories.Audio}
+         {"audio/wav", FileCategories.Audio},
+         {"audio/ogg", FileCategories.Audio}
     };
 
     public static FileCategories GetFileCategory(string contentType)

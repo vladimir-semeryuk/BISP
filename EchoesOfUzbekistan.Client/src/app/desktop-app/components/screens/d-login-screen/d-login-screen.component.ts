@@ -2,7 +2,7 @@ import { NavLink } from './../../../../shared/interfaces/NavLink';
 import { AuthService } from './../../../../services/auth.service';
 import { Router, RouterModule } from '@angular/router';
 import { Component, inject, OnInit } from '@angular/core';
-import { NavbarComponent } from '../../../../shared/components/navbar/navbar.component';
+import { NavbarComponent, NavbarMode } from '../../../../shared/components/navbar/navbar.component';
 import { FooterComponent } from '../../../../shared/components/footer/footer.component';
 import {
   ReactiveFormsModule,
@@ -18,6 +18,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { getUserNavLinks } from '../../../../shared/interfaces/NavLink';
+import { UserProfileService } from '../../../../services/users/user-profile.service';
 
 @Component({
   selector: 'app-d-login-screen',
@@ -37,12 +38,14 @@ import { getUserNavLinks } from '../../../../shared/interfaces/NavLink';
 })
 export class DLoginScreenComponent implements OnInit {
   navLinks: NavLink[] | null;
-  router = inject(Router)
-  authService = inject(AuthService)
+  router = inject(Router);
+  navbarMode = NavbarMode.USER;
+  authService = inject(AuthService);
+  profileService = inject(UserProfileService)
   validateForm!: FormGroup; // Declare it but initialize later
 
   constructor(private fb: NonNullableFormBuilder) {
-    this.navLinks = getUserNavLinks(null)
+    this.navLinks = getUserNavLinks(null);
   }
 
   ngOnInit(): void {
@@ -54,11 +57,17 @@ export class DLoginScreenComponent implements OnInit {
   }
 
   submitForm(): void {
+    console.log('Login submitted', this.validateForm.value);
     if (this.validateForm.valid) {
       this.authService.login(this.validateForm.value).subscribe((response) => {
-        console.log(response);
-        this.router.navigate(['']);
-      })
+        this.profileService.refreshUserProfile().subscribe(profile => {
+          console.log('User profile updated:', profile);
+          // You can now navigate or update the UI after the profile is refreshed
+          this.router.navigate(['']);
+        })
+        // console.log('Login response:', response);
+        // console.log(response);
+      });
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {

@@ -1,7 +1,7 @@
 import { PriceInputComponent } from './../../../../../shared/components/price-input/price-input.component';
 import { SelectLanguageDropdownComponent } from './../../../../../shared/components/select-language-dropdown/select-language-dropdown.component';
 import { Component, inject, ViewChild } from '@angular/core';
-import { NavbarComponent } from '../../../../../shared/components/navbar/navbar.component';
+import { NavbarComponent, NavbarMode } from '../../../../../shared/components/navbar/navbar.component';
 import { AuthService } from '../../../../../services/auth.service';
 import {
   NavLink,
@@ -61,6 +61,7 @@ export class DModifyGuideScreenComponent {
   guideForm!: FormGroup;
   
   navLinks: NavLink[] | null = [];
+  navbarMode = NavbarMode.CMS;
   isOkLoading = false;
 
   @ViewChild(EditMapComponent) editMapComponent!: EditMapComponent;
@@ -75,7 +76,6 @@ export class DModifyGuideScreenComponent {
   }
 
   ngOnInit(): void {
-    this.navLinks = this.setNavLinks();
     this.guideForm = this.fb.group({
       title: this.fb.control('', [Validators.required]),
       city: this.fb.control(''),
@@ -89,13 +89,6 @@ export class DModifyGuideScreenComponent {
         this.currentUserId = t.id;
       }
     });
-  }
-
-  setNavLinks() {
-    if (!this.authService.isLoggedIn()) return getCmsNavLinks(null);
-    const user = this.authService.getUserAuthDetail();
-    if (!user) return getCmsNavLinks(null); // should redirect
-    return getCmsNavLinks(user!.id);
   }
 
   onFileUploaded(result: FileUploadResult) {

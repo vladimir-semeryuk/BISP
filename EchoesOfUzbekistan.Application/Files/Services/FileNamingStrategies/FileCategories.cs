@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EchoesOfUzbekistan.Application.Files.Services.FileNamingStrategies;
+﻿namespace EchoesOfUzbekistan.Application.Files.Services.FileNamingStrategies;
 public enum FileCategories
 {
     Image,

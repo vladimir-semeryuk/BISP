@@ -1,13 +1,8 @@
 ﻿using EchoesOfUzbekistan.Infrastructure.Auth.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EchoesOfUzbekistan.Infrastructure.Auth;
 internal class AdminAuthHttpDelegatingHandler : DelegatingHandler

@@ -1,0 +1,6 @@
+﻿using EchoesOfUzbekistan.Application.Abstractions.Data;
+using EchoesOfUzbekistan.Application.Abstractions.Messages;
+
+namespace EchoesOfUzbekistan.Application.Reports.GetInappropriateContentReports;
+
+public record GetInappropriateContentReportsQuery(GetInappropriateContentReportsFilter Filter) : IQuery<PaginatedResponse<InappropriateContentReportBaseResponse>>;

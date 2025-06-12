@@ -12,6 +12,4 @@ export interface GuideDto {
     originalLanguageId: string;
     audioLink?: string;
     imageLink?: string;
-    audioUrl?: string;
-    imageUrl?: string;
 }

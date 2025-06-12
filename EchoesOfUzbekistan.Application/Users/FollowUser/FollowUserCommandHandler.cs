@@ -26,10 +26,12 @@ public class FollowUserCommandHandler : ICommandHandler<FollowUserCommand>
         if (currentUser == null || targetUser == null)
             return Result.Failure(UserErrors.NotFound);
 
-        currentUser.Follow(targetUser);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        var result = currentUser.Follow(targetUser);
+        
+        if (result.IsSuccess)
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result.Success();
+        return result;
     }
 }
 

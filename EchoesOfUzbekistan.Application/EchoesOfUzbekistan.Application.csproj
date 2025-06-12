@@ -8,16 +8,13 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.35" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
+    <PackageReference Include="Mapster" Version="7.4.0" />
     <PackageReference Include="MediatR" Version="12.4.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\EchoesOfUzbekistan.Domain\EchoesOfUzbekistan.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Places\EditPlace\" />
-    <Folder Include="Places\DeletePlace\" />
   </ItemGroup>
 
 </Project>

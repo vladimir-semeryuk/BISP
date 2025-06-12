@@ -8,4 +8,5 @@ public record CreatePlaceRequest(
     string LanguageCode,
     Guid AuthorId,
     string? AudioLink,
-    string? ImageLink);
+    string? ImageLink,
+    List<Guid>? AudioGuidesIds);

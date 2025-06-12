@@ -26,9 +26,10 @@ public class UnfollowUserCommandHandler : ICommandHandler<UnfollowUserCommand>
         if (currentUser == null || targetUser == null)
             return Result.Failure(UserErrors.NotFound);
 
-        currentUser.Unfollow(targetUser);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        var result = currentUser.Unfollow(targetUser);
+        if (result.IsSuccess)
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result.Success();
+        return result;
     }
 }

@@ -1,13 +1,8 @@
 ﻿using Amazon.S3.Model;
 using Amazon.S3;
+using Amazon.S3.Transfer;
 using EchoesOfUzbekistan.Application.Abstractions.FileHandling;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Mime;
 
 namespace EchoesOfUzbekistan.Infrastructure.FileUpload;
 public class S3FileService : IFileService
@@ -32,6 +27,28 @@ public class S3FileService : IFileService
         await _s3Client.DeleteObjectAsync(request);
     }
 
+    public async Task UploadAsync(
+        byte[] file, 
+        string fileName, 
+        string filePath, 
+        string contentType, 
+        CancellationToken cancellationToken)
+    {
+        using var memoryStream = new MemoryStream(file);
+
+        var putRequest = new PutObjectRequest
+        {
+            BucketName = _s3Settings.BucketName,
+            Key = filePath,
+            InputStream = memoryStream,
+            ContentType = contentType,
+            AutoCloseStream = true,
+            DisablePayloadSigning = true
+        };
+
+        await _s3Client.PutObjectAsync(putRequest, cancellationToken);
+    }
+
     public Task<string> GetPresignedUrlForGetAsync(string key, CancellationToken cancellationToken = default)
     {
         // Create the request for a GET presigned URL.
@@ -48,6 +65,19 @@ public class S3FileService : IFileService
         return Task.FromResult(preSignedUrl);
     }
 
+    public async Task DeleteBatchAsync(IEnumerable<string> keys, CancellationToken cancellationToken = default)
+    {
+        if (keys == null || !keys.Any())
+            return;
+
+        var deleteObjectsRequest = new DeleteObjectsRequest
+        {
+            BucketName = _s3Settings.BucketName,
+            Objects = keys.Select(k => new KeyVersion { Key = k }).ToList()
+        };
+
+        await _s3Client.DeleteObjectsAsync(deleteObjectsRequest, cancellationToken);
+    }
 
     Task<string> IFileService.GetPresignedUrlForPutAsync(string fileName, string filePath, string? contentType, CancellationToken cancellationToken)
     {
@@ -67,5 +97,24 @@ public class S3FileService : IFileService
         // Generate the presigned URL.
         string preSignedUrl = _s3Client.GetPreSignedURL(request);
         return Task.FromResult(preSignedUrl);
+    }
+
+    public async Task<Stream?> GetStreamAsync(string key, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var request = new GetObjectRequest
+            {
+                BucketName = _s3Settings.BucketName,
+                Key = key
+            };
+
+            var response = await _s3Client.GetObjectAsync(request, cancellationToken);
+            return response.ResponseStream;
+        }
+        catch (AmazonS3Exception ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            return null;
+        }
     }
 }

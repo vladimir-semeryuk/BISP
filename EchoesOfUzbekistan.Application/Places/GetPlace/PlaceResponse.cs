@@ -1,11 +1,4 @@
-﻿using EchoesOfUzbekistan.Domain.Common;
-using EchoesOfUzbekistan.Domain.Places;
-using NetTopologySuite.Geometries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EchoesOfUzbekistan.Domain.Places;
 
 namespace EchoesOfUzbekistan.Application.Places.GetPlace;
 public class PlaceResponse
@@ -19,7 +12,11 @@ public class PlaceResponse
     public DateTime? DateEdited { get; init; }
     public Guid AuthorId { get; init; }
     public Guid OriginalLanguageId { get; init; }
-    public string? AudioLink { get; private set; } = null;
-    public string? ImageLink { get; private set; } = null;
+    public string LanguageCode { get; set; }
+    public string? AudioLink { get; set; } = null;
+    public string? ImageLink { get; set; } = null;
+    public string? ImageKey { get; init; }
+    public string? AudioKey { get; init; }
+    public Guid[] AudioGuideIds { get; init; }
     // public ICollection<PlaceTranslation> Translations { get; private set; }
 }

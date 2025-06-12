@@ -1,13 +1,7 @@
 ﻿using EchoesOfUzbekistan.Application.Abstractions.Auth;
 using EchoesOfUzbekistan.Domain.Users;
 using EchoesOfUzbekistan.Infrastructure.Auth.Models;
-using Microsoft.AspNetCore.Authentication;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EchoesOfUzbekistan.Infrastructure.Auth;
 internal class AuthService : IAuthService
@@ -43,6 +37,26 @@ internal class AuthService : IAuthService
             cancellationToken);
 
         return ExtractIdentityIdFromLocationHeader(response);
+    }
+
+    public async Task ChangePasswordAsync(
+        string userId,
+        string newPassword,
+        CancellationToken cancellationToken)
+    {
+        var resetPasswordPayload = new CredentialRepresentationModel
+        {
+            Type = PasswordCredentialType,
+            Temporary = false,
+            Value = newPassword
+        };
+
+        HttpResponseMessage resetResponse = await _httpClient.PutAsJsonAsync(
+            $"users/{userId}/reset-password",
+            resetPasswordPayload,
+            cancellationToken);
+
+        resetResponse.EnsureSuccessStatusCode();
     }
 
     private static string ExtractIdentityIdFromLocationHeader(

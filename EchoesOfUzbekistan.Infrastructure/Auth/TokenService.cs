@@ -1,13 +1,8 @@
 ﻿using EchoesOfUzbekistan.Application.Abstractions.Auth;
 using EchoesOfUzbekistan.Domain.Abstractions;
-using EchoesOfUzbekistan.Infrastructure.Auth.Models;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
+using EchoesOfUzbekistan.Application.Users.LoginUser;
 
 namespace EchoesOfUzbekistan.Infrastructure.Auth;
 internal class TokenService : ITokenService
@@ -25,7 +20,7 @@ internal class TokenService : ITokenService
         _keycloakOptions = keycloakOptions.Value;
     }
 
-    public async Task<Result<string>> GetAccessTokenAsync(
+    public async Task<Result<TokenResponse>> GetAccessTokenAsync(
         string email,
         string password,
         CancellationToken cancellationToken = default)
@@ -50,20 +45,59 @@ internal class TokenService : ITokenService
                 cancellationToken);
             response.EnsureSuccessStatusCode();
 
-            AuthorisationToken? authToken = await response
+            TokenResponse? authToken = await response
                 .Content
-                .ReadFromJsonAsync<AuthorisationToken>(cancellationToken);
+                .ReadFromJsonAsync<TokenResponse>(cancellationToken);
 
             if (authToken is null)
             {
-                return Result.Failure<string>(AuthenticationFailed);
+                return Result.Failure<TokenResponse>(AuthenticationFailed);
             }
 
-            return authToken.AccessToken;
+            return authToken;
         }
         catch (HttpRequestException)
         {
-            return Result.Failure<string>(AuthenticationFailed);
+            return Result.Failure<TokenResponse>(AuthenticationFailed);
+        }
+    }
+
+    public async Task<Result<TokenResponse>> RefreshAccessTokenAsync(
+        string refreshToken,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var authRequestParameters = new KeyValuePair<string, string>[]
+            {
+                new("client_id", _keycloakOptions.AuthClientId),
+                new("client_secret", _keycloakOptions.AuthClientSecret),
+                new("grant_type", "refresh_token"),
+                new("refresh_token", refreshToken)
+            };
+
+            using var authorizationRequestContent = new FormUrlEncodedContent(authRequestParameters);
+
+            HttpResponseMessage response = await _httpClient.PostAsync(
+                "",
+                authorizationRequestContent,
+                cancellationToken);
+            response.EnsureSuccessStatusCode();
+
+            TokenResponse? authToken = await response
+                .Content
+                .ReadFromJsonAsync<TokenResponse>(cancellationToken);
+
+            if (authToken is null)
+            {
+                return Result.Failure<TokenResponse>(AuthenticationFailed);
+            }
+
+            return authToken;
+        }
+        catch (HttpRequestException)
+        {
+            return Result.Failure<TokenResponse>(AuthenticationFailed);
         }
     }
 }

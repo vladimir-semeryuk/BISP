@@ -1,0 +1,193 @@
+<app-navbar [mode]="navbarMode"></app-navbar>
+<hr />
+<section>
+  <div class="container">
+    @if (isGuideLoading) {
+    <div class="loading-container">
+      <nz-spin nzSimple></nz-spin>
+    </div>
+    } @else if (isGuideNotFound) {
+    <nz-empty
+      nzNotFoundImage="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+      [nzNotFoundContent]="contentTpl"
+      [nzNotFoundFooter]="footerTpl"
+    ></nz-empty>
+    } @else {
+    <div class="info-section">
+      <div class="image-section">
+        <img
+          nz-image
+          [nzSrc]="guide?.imageLink || 'fallback.png'"
+          [alt]="guide?.title"
+          nzPlaceholder="fallback.png"
+          nzFallback="fallback.png"
+          nzPreview
+        />
+      </div>
+      <div class="content-section">
+        <div class="guide-content">
+          <div class="guide-header">
+            <h1>{{ guide?.title }}</h1>
+            <p class="description">{{ guide?.description }}</p>
+            <div class="button-row">
+              <button
+                nz-button
+                [nzType]="isLiked ? 'primary' : 'default'"
+                class="like-btn"
+                (click)="onLikeClick()"
+                [nzLoading]="isLoadingLike"
+              >
+                <nz-icon
+                  nzType="like"
+                  [nzTheme]="isLiked ? 'outline' : 'fill'"
+                />
+                {{ isLiked ? "Liked!" : "Like!" }}
+                <span class="like-count" *ngIf="(guide?.likeCount ?? 0) > 0"
+                  >({{ guide?.likeCount }})</span
+                >
+              </button>
+              <button nz-button nzType="primary" class="play-btn" (click)="onPurchaseClick()" *ngIf="!hasPurchased">
+                <nz-icon nzType="play-square" nzTheme="outline" />
+                Buy to Play!
+              </button>
+            </div>
+          </div>
+
+          <div class="audio-section" *ngIf="hasPurchased">
+            <app-audio-player [guideId]="guide!.id" [hasPurchased]="hasPurchased"></app-audio-player>
+          </div>
+        </div>
+
+        <div class="author-info">
+          <span class="author-label">Author:</span>
+          <a [routerLink]="['/profile', guide?.authorId]">
+            {{ guide?.authorName }}
+          </a>
+        </div>
+        <p class="price">
+          {{ guide?.priceAmount }} {{ guide?.priceCurrency }}
+        </p>
+        <h2>Full Description</h2>
+        <div
+          class="description-container"
+          [class.no-description]="!guide?.description"
+        >
+          <p class="description">
+            {{ guide?.description }}
+          </p>
+          <div class="fallback">No description is provided</div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-header">Map Route</h2>
+    <div class="map-section">
+      @if (guide?.places?.length) {
+      <div class="map-wrap">
+        <div class="map" #map></div>
+      </div>
+      } @else {
+      <div class="no-map-message">
+        <nz-icon nzType="info-circle" nzTheme="outline"></nz-icon>
+        <p>This guide doesn't include a map route</p>
+      </div>
+      }
+    </div>
+
+    <h2 class="section-header">Reviews and Comments</h2>
+    <div class="comments-section">
+      <div class="reaction-summary">
+        <nz-icon nzType="like" nzTheme="outline" class="like-icon"></nz-icon>
+        <span class="text">
+          {{ guide?.likeCount }} people left their positive reactions for this
+          audio guide!
+        </span>
+      </div>
+
+      @if (isLoadingComments) {
+      <div class="loading-container">
+        <nz-spin nzSimple></nz-spin>
+      </div>
+      } @else {
+      <ng-container *ngFor="let comment of comments">
+        <ng-template #authorLink let-comment="comment">
+          <a
+            [routerLink]="['/profile', comment.authorId]"
+          >
+            {{ comment.authorName }}
+          </a>
+        </ng-template>
+
+        <nz-comment
+          [nzAuthor]="authorLinkTemplate"
+          [nzDatetime]="formatCommentDate(comment.dateCreated)"
+        >
+          <nz-avatar
+            nz-comment-avatar
+            [nzSrc]="comment.authorAvatar"
+            [nzAlt]="comment.authorName"
+          ></nz-avatar>
+
+          <nz-comment-content>
+            <p>{{ comment.content }}</p>
+          </nz-comment-content>
+        </nz-comment>
+
+        <ng-template #authorLinkTemplate>
+          <a
+            [routerLink]="['/profile', comment.authorId]"
+          >
+            {{ comment.authorName }}
+          </a>
+        </ng-template>
+      </ng-container>
+
+      <form
+        nzForm
+        [formGroup]="commentForm"
+        class="new-comment"
+        (ngSubmit)="submitComment()"
+      >
+        <div class="comment-row">
+          <nz-avatar
+            nz-comment-avatar
+            [nzSrc]="currentUser.avatar"
+            class="comment-avatar"
+          ></nz-avatar>
+
+          <div class="comment-input-wrapper">
+            <nz-textarea-count [nzMaxCharacterCount]="5000">
+              <textarea
+                formControlName="comment"
+                nz-input
+                rows="4"
+                placeholder="Write your comment here..."
+              ></textarea>
+            </nz-textarea-count>
+
+            <button
+              nz-button
+              nzType="primary"
+              [disabled]="commentForm.invalid || isSubmittingComment"
+              [nzLoading]="isSubmittingComment"
+            >
+              Add Comment
+            </button>
+          </div>
+        </div>
+      </form>
+      }
+    </div>
+    }
+  </div>
+</section>
+
+<ng-template #contentTpl>
+  <span> Guide not found or you don't have permission to view it. </span>
+</ng-template>
+
+<ng-template #footerTpl>
+  <a nz-button nzType="primary" [routerLink]="['/']">Go Back Home</a>
+</ng-template>
+
+<app-footer></app-footer>

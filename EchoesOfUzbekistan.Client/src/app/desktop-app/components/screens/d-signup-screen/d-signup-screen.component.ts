@@ -15,7 +15,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NavbarComponent } from '../../../../shared/components/navbar/navbar.component';
+import { NavbarComponent, NavbarMode } from '../../../../shared/components/navbar/navbar.component';
 import { getUserNavLinks, NavLink } from '../../../../shared/interfaces/NavLink';
 import { SelectCountryDropdownComponent } from '../../../../shared/components/select-country-dropdown/select-country-dropdown.component';
 import { PriceInputComponent } from "../../../../shared/components/price-input/price-input.component";
@@ -45,6 +45,7 @@ import { getCustomValidateStatus } from './temporary-util';
 })
 export class DSignupScreenComponent implements OnInit {
   navLinks: NavLink[] | null;
+  navbarMode = NavbarMode.USER;
   validateForm!: FormGroup; // Declare it but initialize later
 
   constructor(private fb: NonNullableFormBuilder) {

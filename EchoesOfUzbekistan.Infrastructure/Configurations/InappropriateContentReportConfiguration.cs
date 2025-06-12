@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using EchoesOfUzbekistan.Domain.Reports;
-using EchoesOfUzbekistan.Domain.Abstractions;
 using EchoesOfUzbekistan.Domain.Guides;
 
 namespace EchoesOfUzbekistan.Infrastructure.Configurations;

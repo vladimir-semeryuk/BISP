@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EchoesOfUzbekistan.Domain.Users;
+﻿namespace EchoesOfUzbekistan.Domain.Users;
 public class Role
 {
     public static readonly Role OrdinaryUser = new(1, "OrdinaryUser");

@@ -32,7 +32,7 @@ export class EditMapComponent implements OnInit, AfterViewInit, OnDestroy {
   createdPlaces: PlaceNewlyCreatedDetails[] = [];
   pointsToAdd: Point[] = [];
   routeToAdd: LineString[] = [];
-  private lastCreatedPointId: string | null = null;
+  lastCreatedPointId: string | null = null;
   selectedCoordinates: [number, number] | null = null;
   showModal = false;
   placeName = '';

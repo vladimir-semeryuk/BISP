@@ -1,10 +1,4 @@
 ﻿using EchoesOfUzbekistan.Domain.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EchoesOfUzbekistan.Domain.Users;
 
 namespace EchoesOfUzbekistan.Domain.Guides;
 public class AudioGuidePurchase : Entity
@@ -15,6 +9,7 @@ public class AudioGuidePurchase : Entity
 
     public AudioGuidePurchase(Guid userId, Guid guideId)
     {
+        Id = Guid.NewGuid();
         UserId = userId;
         GuideId = guideId;
         PurchaseDate = DateTime.UtcNow;

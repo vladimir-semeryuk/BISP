@@ -24,7 +24,7 @@ public class PlaceConfiguration : IEntityTypeConfiguration<Place>
 
         // Configure properties
         builder.Property(p => p.Title)
-            .HasConversion(title => title.placeTitle, placeTitle => new PlaceTitle(placeTitle))
+            .HasConversion(title => title.Value, placeTitle => new PlaceTitle(placeTitle))
             .IsRequired();
         
         builder.Property(p => p.Description)
@@ -42,11 +42,11 @@ public class PlaceConfiguration : IEntityTypeConfiguration<Place>
             .IsRequired(false);
 
         builder.Property(p => p.AudioLink)
-            .HasConversion(audio => audio != null ? audio.value : null, link => link != null ? new ResourceLink(link) : null)
+            .HasConversion(audio => audio != null ? audio.Value : null, link => link != null ? new ResourceLink(link) : null)
             .IsRequired(false);
 
         builder.Property(p => p.ImageLink)
-            .HasConversion(img => img != null ? img.value : null, link => link != null ? new ResourceLink(link) : null)
+            .HasConversion(img => img != null ? img.Value : null, link => link != null ? new ResourceLink(link) : null)
             .IsRequired(false);
 
         builder.Property(p => p.Status)
@@ -62,7 +62,7 @@ public class PlaceConfiguration : IEntityTypeConfiguration<Place>
                 v => v.ToString(),
                 v => new PlaceTitle(v));
             translation.Property(t => t.audioLink)
-                .HasConversion(audio => audio != null ? audio.value : null,
+                .HasConversion(audio => audio != null ? audio.Value : null,
                                link => link != null ? new ResourceLink(link) : null);
             translation.HasOne<Language>()
             .WithMany()

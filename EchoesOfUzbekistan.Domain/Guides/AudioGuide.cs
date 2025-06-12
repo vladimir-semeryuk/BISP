@@ -1,13 +1,6 @@
 ﻿using EchoesOfUzbekistan.Domain.Abstractions;
 using EchoesOfUzbekistan.Domain.Common;
 using EchoesOfUzbekistan.Domain.Places;
-using EchoesOfUzbekistan.Domain.Users.Events;
-using EchoesOfUzbekistan.Domain.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EchoesOfUzbekistan.Domain.Guides.Events;
 
 namespace EchoesOfUzbekistan.Domain.Guides;
@@ -93,35 +86,63 @@ public class AudioGuide : Entity
         Status = guideStatus;
         OriginalLanguageId = languageId;
 
-        var oldImageLink = ImageLink?.value;
-        var oldAudioLink = AudioLink?.value;
-
-        // Update the image link.
-        ImageLink = newImageLink;
-        AudioLink = newAudioLink;
-
-        // If the image link has changed, add a domain event.
-        if (oldImageLink != null && !string.Equals(oldImageLink, newImageLink?.value, StringComparison.OrdinalIgnoreCase))
-        {
-            var imageUpdatedEvent = new AudioGuideResourceUpdatedEvent(oldImageLink);
-            RaiseDomainEvent(imageUpdatedEvent);
-        }
-        if (oldAudioLink != null && !string.Equals(oldAudioLink, newAudioLink?.value, StringComparison.OrdinalIgnoreCase))
-        {
-            var audioUpdatedEvent = new AudioGuideResourceUpdatedEvent(oldAudioLink);
-            RaiseDomainEvent(audioUpdatedEvent);
-        }
+        UpdateImageLink(newImageLink);
+        UpdateAudioLink(newAudioLink);
 
         DateEdited = DateTime.UtcNow;
     }
 
-    public void MarkAsDeleted()
+    private void UpdateImageLink(ResourceLink? newImageLink)
+    {
+        if (ImageLink is not null && newImageLink is null)
+        {
+            // Image is being removed
+            var oldLink = ImageLink.Value;
+            ImageLink = null;
+
+            RaiseDomainEvent(new EntityFileResourceDeletedEvent(oldLink));
+        }
+        else if (newImageLink is not null)
+        {
+            var oldLink = ImageLink?.Value;
+            ImageLink = newImageLink;
+
+            // Raise updated event if the value actually changed
+            if (oldLink is not null && !string.Equals(oldLink, newImageLink.Value, StringComparison.OrdinalIgnoreCase))
+            {
+                RaiseDomainEvent(new EntityFileResourceUpdatedEvent(oldLink));
+            }
+        }
+    }
+
+    private void UpdateAudioLink(ResourceLink? newAudioLink)
+    {
+        if (AudioLink is not null && newAudioLink is null)
+        {
+            var oldLink = AudioLink.Value;
+            AudioLink = null;
+
+            RaiseDomainEvent(new EntityFileResourceDeletedEvent(oldLink));
+        }
+        else if (newAudioLink is not null)
+        {
+            var oldLink = AudioLink?.Value;
+            AudioLink = newAudioLink;
+
+            // Raise updated event if the value actually changed
+            if (oldLink is not null && !string.Equals(oldLink, newAudioLink.Value, StringComparison.OrdinalIgnoreCase))
+            {
+                RaiseDomainEvent(new EntityFileResourceUpdatedEvent(oldLink));
+            }
+        }
+    }
+    public void Delete()
     {
         var deletionEvent = new AudioGuideDeletedEvent(
             Id,
-            AudioLink?.value,
-            ImageLink?.value,
-            Translations.Select(t => t.audioLink?.value).ToList(),
+            AudioLink?.Value,
+            ImageLink?.Value,
+            Translations.Select(t => t.AudioLink?.Value).ToList(),
             Places.ToList());
         RaiseDomainEvent(deletionEvent);
     }
@@ -132,13 +153,13 @@ public class AudioGuide : Entity
     }
     public GuideTranslation? GetTranslation(Language language)
     {
-        return Translations.FirstOrDefault(t => t.languageId == language.Id);
+        return Translations.FirstOrDefault(t => t.LanguageId == language.Id);
     }
-    // each audio guide may contain many places, although upon creation it can have non
+    // each audio guide may contain many places, although upon creation it can have none
     public void AddPlace(Place place)
     {
         if (Places.Contains(place))
-            throw new InvalidOperationException("Place is already part of this guide.");
+            return;
 
         Places.Add(place);
     }
@@ -146,7 +167,7 @@ public class AudioGuide : Entity
     public void RemovePlace(Place place)
     {
         if (!Places.Contains(place))
-            throw new InvalidOperationException("Place is not part of this guide.");
+            return;
 
         Places.Remove(place);
     }

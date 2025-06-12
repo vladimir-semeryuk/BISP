@@ -27,7 +27,11 @@ import {
   CloseOutline,
   DownloadOutline,
   CloudDownloadOutline,
-  FileTwoTone
+  FileTwoTone,
+  LikeOutline,
+  PlaySquareOutline,
+  WarningOutline,
+  LikeFill
 } from '@ant-design/icons-angular/icons';
 import { tokenInterceptor } from './interceptors/token.interceptor';
 
@@ -50,7 +54,11 @@ const icons: IconDefinition[] = [
   DownloadOutline,
   DownloadOOutline,
   CloudDownloadOutline,
-  FileTwoTone
+  FileTwoTone,
+  LikeOutline,
+  PlaySquareOutline,
+  WarningOutline,
+  LikeFill
 ];
 
 registerLocaleData(en);

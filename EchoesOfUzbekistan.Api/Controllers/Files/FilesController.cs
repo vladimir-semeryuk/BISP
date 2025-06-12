@@ -1,4 +1,6 @@
 ﻿using EchoesOfUzbekistan.Application.Abstractions;
+using EchoesOfUzbekistan.Application.Files.DeleteFile;
+using EchoesOfUzbekistan.Application.Files.DeleteFiles;
 using EchoesOfUzbekistan.Application.Files.GetFile;
 using EchoesOfUzbekistan.Application.Files.UploadFile;
 using EchoesOfUzbekistan.Application.Users.Services;
@@ -45,5 +47,31 @@ public class FilesController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError, (response.Error));
         }
         return Ok(response.Value);
+    }
+
+    [Authorize]
+    [HttpDelete("batch")]
+    public async Task<IActionResult> DeleteFiles([FromBody] DeleteFilesRequest request, CancellationToken cts)
+    {
+        var command = new DeleteFilesCommand(request.Keys);
+        var result = await _sender.Send(command, cts);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+        return Ok(result);
+    }
+
+    [Authorize]
+    [HttpDelete]
+    public async Task<IActionResult> DeleteFile([FromQuery] string fileKey, CancellationToken cancellationToken)
+    {
+        var command = new DeleteFileCommand(fileKey);
+        var result = await _sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok();
     }
 }

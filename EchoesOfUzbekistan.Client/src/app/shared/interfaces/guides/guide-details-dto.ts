@@ -15,8 +15,8 @@ export interface GuideDetailsDto {
   originalLanguageId: string;
   audioLink?: string;
   imageLink?: string;
-  audioUrl?: string;
-  imageUrl?: string;
   places: PlaceDto[];
   translations: GuideTranslationDto[];
+  likeCount: number;
+  authorName: string;
 }

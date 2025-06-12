@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace EchoesOfUzbekistan.Domain.Abstractions;
 
@@ -48,7 +42,7 @@ public class Result<TValue> : Result
     [NotNull]
     public TValue Value => IsSuccess
         ? _value!
-        : throw new InvalidOperationException("The value of a failure result cannot be accessed.");
+        : throw new InvalidOperationException("The Value of a failure result cannot be accessed.");
 
     public static implicit operator Result<TValue>(TValue? value) => Create(value);
 }

@@ -1,5 +1,4 @@
-<app-navbar [navLinks]="navLinks"
-navbarClass="navbar user-navbar"></app-navbar>
+<app-navbar [mode]="navbarMode"></app-navbar>
 <hr>
 <section class="login-section">
   <div class="form-container">
@@ -37,6 +36,9 @@ navbarClass="navbar user-navbar"></app-navbar>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
+      <div class="forgot-password">
+        <a routerLink="/forgot-password">Forgot password?</a>
+      </div>
       <div class="submit-group">
           <button
             nz-button
@@ -45,7 +47,6 @@ navbarClass="navbar user-navbar"></app-navbar>
           >
             Log in
           </button>
-          <!-- <button nz-button nzType="text" id="register-button">Register now!</button> -->
           <a id="register-button" routerLink="/signup">Register now!</a>
       </div>
     </form>

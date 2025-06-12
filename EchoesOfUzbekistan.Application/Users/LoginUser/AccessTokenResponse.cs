@@ -1,8 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace EchoesOfUzbekistan.Application.Users.LoginUser;
-public record AccessTokenResponse(string AccessToken);
+public record TokenResponse
+{
+    [JsonPropertyName("access_token")]
+    public string AccessToken { get; init; } = string.Empty;
+
+    [JsonPropertyName("refresh_token")]
+    public string RefreshToken { get; init; } = string.Empty;
+
+    [JsonPropertyName("expires_in")]
+    public int ExpiresIn { get; init; }
+
+    [JsonPropertyName("refresh_expires_in")]
+    public int RefreshExpiresIn { get; set; }
+}

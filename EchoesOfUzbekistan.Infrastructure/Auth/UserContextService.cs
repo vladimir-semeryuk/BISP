@@ -1,12 +1,6 @@
 ﻿using EchoesOfUzbekistan.Application.Users.Services;
 using EchoesOfUzbekistan.Infrastructure.Authorisation;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EchoesOfUzbekistan.Infrastructure.Auth;
 public class UserContextService : IUserContextService
@@ -31,4 +25,11 @@ public class UserContextService : IUserContextService
             .User
             .GetIdentityId() ??
         throw new ApplicationException("User Id Helper could not find the user id");
+
+    public List<string> Roles =>
+        _httpContextAccessor
+            .HttpContext?
+            .User
+            .GetRoles() ??
+        throw new ApplicationException("User Id Helper could not find the user roles");
 }

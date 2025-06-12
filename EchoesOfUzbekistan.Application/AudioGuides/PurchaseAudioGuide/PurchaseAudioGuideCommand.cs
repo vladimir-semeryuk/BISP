@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EchoesOfUzbekistan.Application.Abstractions.Messages;
+﻿using EchoesOfUzbekistan.Application.Abstractions.Messages;
 
 namespace EchoesOfUzbekistan.Application.AudioGuides.PurchaseAudioGuide;
 
-public record PurchaseAudioGuideCommand(Guid GuideId) : ICommand;
+public record PurchaseAudioGuideCommand(Guid GuideId) : ICommand<string>;

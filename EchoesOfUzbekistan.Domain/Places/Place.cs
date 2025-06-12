@@ -1,14 +1,10 @@
 ﻿using EchoesOfUzbekistan.Domain.Abstractions;
 using EchoesOfUzbekistan.Domain.Common;
 using EchoesOfUzbekistan.Domain.Guides;
-using EchoesOfUzbekistan.Domain.Users;
 using NetTopologySuite.Geometries;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using EchoesOfUzbekistan.Domain.Guides.Events;
+using EchoesOfUzbekistan.Domain.Places.Events;
 
 namespace EchoesOfUzbekistan.Domain.Places;
 public class Place : Entity
@@ -36,7 +32,9 @@ public class Place : Entity
         Point coordinates,
         PlaceStatus status,
         Guid originalLanguageId,
-        Guid authorId
+        Guid authorId,
+        ResourceLink? audioLink,
+        ResourceLink? imageLink
         ) : base(id)
     {
         Title = title;
@@ -48,6 +46,77 @@ public class Place : Entity
         Translations = new List<PlaceTranslation>();
         DatePublished = DateTime.UtcNow;
         Guides = new List<AudioGuide>();
+        AudioLink = audioLink;
+        ImageLink = imageLink;
+    }
+
+    public void Edit(
+        PlaceTitle title,
+        PlaceDescription? description,
+        Point coordinates,
+        Guid languageId,
+        ResourceLink? newAudioLink,
+        ResourceLink? newImageLink)
+    {
+        Title = title;
+        Description = description;
+        Coordinates = coordinates;
+        OriginalLanguageId = languageId;
+
+        UpdateImageLink(newImageLink);
+        UpdateAudioLink(newAudioLink);
+
+        DateEdited = DateTime.UtcNow;
+    }
+
+    public void Delete()
+    {
+        RaiseDomainEvent(new PlaceDeletedDomainEvent(ImageLink?.Value, AudioLink?.Value, Translations.ToList()));
+    }
+
+    private void UpdateImageLink(ResourceLink? newImageLink)
+    {
+        if (ImageLink is not null && newImageLink is null)
+        {
+            // Image is being removed
+            var oldLink = ImageLink.Value;
+            ImageLink = null;
+
+            RaiseDomainEvent(new EntityFileResourceDeletedEvent(oldLink));
+        }
+        else if (newImageLink is not null)
+        {
+            var oldLink = ImageLink?.Value;
+            ImageLink = newImageLink;
+
+            // Raise updated event if the value actually changed
+            if (oldLink is not null && !string.Equals(oldLink, newImageLink.Value, StringComparison.OrdinalIgnoreCase))
+            {
+                RaiseDomainEvent(new EntityFileResourceUpdatedEvent(oldLink));
+            }
+        }
+    }
+
+    private void UpdateAudioLink(ResourceLink? newAudioLink)
+    {
+        if (AudioLink is not null && newAudioLink is null)
+        {
+            var oldLink = AudioLink.Value;
+            AudioLink = null;
+
+            RaiseDomainEvent(new EntityFileResourceDeletedEvent(oldLink));
+        }
+        else if (newAudioLink is not null)
+        {
+            var oldLink = AudioLink?.Value;
+            AudioLink = newAudioLink;
+
+            // Raise updated event if the value actually changed
+            if (oldLink is not null && !string.Equals(oldLink, newAudioLink.Value, StringComparison.OrdinalIgnoreCase))
+            {
+                RaiseDomainEvent(new EntityFileResourceUpdatedEvent(oldLink));
+            }
+        }
     }
     public void AddTranslation(PlaceTranslation translation)
     {

@@ -1,10 +1,5 @@
 ﻿using Microsoft.IdentityModel.JsonWebTokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EchoesOfUzbekistan.Infrastructure.Authorisation;
 internal static class ClaimsPrincipalExtensions
@@ -22,5 +17,16 @@ internal static class ClaimsPrincipalExtensions
     {
         return principal?.FindFirstValue(ClaimTypes.NameIdentifier) ??
                throw new ApplicationException("User identity is unavailable");
+    }
+
+    public static List<string> GetRoles(this ClaimsPrincipal? principal)
+    {
+        if (principal == null)
+            throw new ApplicationException("User principal is unavailable");
+
+        return principal.Claims
+            .Where(c => c.Type == ClaimTypes.Role)
+            .Select(c => c.Value)
+            .ToList();
     }
 }

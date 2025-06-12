@@ -1,9 +1,4 @@
 ﻿using EchoesOfUzbekistan.Domain.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EchoesOfUzbekistan.Domain.Guides;
 public static class AudioGuideErrors
@@ -19,4 +14,8 @@ public static class AudioGuideErrors
     public static readonly Error AlreadyPurchased = new(
         "AudioGuide.AlreadyPurchased",
         "You have already purchased this guide.");
+
+    public static readonly Error PurchaseError = new(
+        "AudioGuide.PurchaseError",
+        "There was an error with processing the payment.");
 }

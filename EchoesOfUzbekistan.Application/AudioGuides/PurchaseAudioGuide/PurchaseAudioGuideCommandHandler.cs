@@ -6,7 +6,7 @@ using EchoesOfUzbekistan.Domain.Guides;
 using EchoesOfUzbekistan.Domain.Guides.Repositories;
 
 namespace EchoesOfUzbekistan.Application.AudioGuides.PurchaseAudioGuide;
-public class PurchaseAudioGuideCommandHandler : ICommandHandler<PurchaseAudioGuideCommand>
+public class PurchaseAudioGuideCommandHandler : ICommandHandler<PurchaseAudioGuideCommand, string>
 {
     private readonly IGuideRepository _guideRepository;
     private readonly IGuidePurchaseRepository _purchaseRepository;
@@ -21,19 +21,19 @@ public class PurchaseAudioGuideCommandHandler : ICommandHandler<PurchaseAudioGui
         _userContext = userContext;
     }
 
-    public async Task<Result> Handle(PurchaseAudioGuideCommand request, CancellationToken cancellationToken)
+    public async Task<Result<string>> Handle(PurchaseAudioGuideCommand request, CancellationToken cancellationToken)
     {
         var guide = await _guideRepository.GetByIdAsync(request.GuideId, cancellationToken);
         var userId = _userContext.UserId;
         if (guide == null)
-            return Result.Failure(AudioGuideErrors.NotFound);
+            return Result.Failure<string>(AudioGuideErrors.NotFound);
 
         if (guide.Price.Amount <= 0)
-            return Result.Failure(AudioGuideErrors.FreeGuide);
+            return Result.Failure<string>(AudioGuideErrors.FreeGuide);
 
         var hasAlreadyPurchased = await _purchaseRepository.ExistsAsync(userId, request.GuideId);
         if (hasAlreadyPurchased)
-            return Result.Failure(AudioGuideErrors.AlreadyPurchased);
+            return Result.Failure<string>(AudioGuideErrors.AlreadyPurchased);
 
         var checkoutUrl = await _paymentProcessor.CreateCheckoutSessionAsync(guide, userId);
         return Result.Success(checkoutUrl);

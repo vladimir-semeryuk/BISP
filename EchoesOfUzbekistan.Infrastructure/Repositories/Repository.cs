@@ -1,14 +1,9 @@
 ﻿using EchoesOfUzbekistan.Domain.Abstractions;
-using EchoesOfUzbekistan.Domain.Users;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EchoesOfUzbekistan.Infrastructure.Repositories;
-internal abstract class Repository<T> where T : Entity
+
+public abstract class Repository<T> where T : Entity
 {
     protected readonly AppDbContext _context;
 

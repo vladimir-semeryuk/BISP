@@ -1,7 +1,8 @@
-﻿namespace EchoesOfUzbekistan.Domain.Reports;
-public class InappropriateContentReport
+﻿using EchoesOfUzbekistan.Domain.Abstractions;
+
+namespace EchoesOfUzbekistan.Domain.Reports;
+public class InappropriateContentReport : Entity
 {
-    public Guid Id { get; private set; }
     public Guid UserId { get; private set; }
     public Guid AudioGuideId { get; private set; }
     public string Reason { get; private set; }
@@ -19,5 +20,10 @@ public class InappropriateContentReport
     public void MarkAsResolved()
     {
         Status = ReportStatus.Resolved;
+    }
+
+    public void MarkAsDismissed()
+    {
+        Status = ReportStatus.Dismissed;
     }
 }

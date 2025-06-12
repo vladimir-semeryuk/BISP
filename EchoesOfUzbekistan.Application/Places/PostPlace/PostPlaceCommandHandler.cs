@@ -1,17 +1,11 @@
 ﻿using EchoesOfUzbekistan.Application.Abstractions.Messages;
-using EchoesOfUzbekistan.Application.AudioGuides.PostAudioGuide;
 using EchoesOfUzbekistan.Application.Users.Services;
 using EchoesOfUzbekistan.Domain.Abstractions;
 using EchoesOfUzbekistan.Domain.Common;
-using EchoesOfUzbekistan.Domain.Guides;
+using EchoesOfUzbekistan.Domain.Guides.Repositories;
 using EchoesOfUzbekistan.Domain.Places;
 using EchoesOfUzbekistan.Domain.Users;
 using NetTopologySuite.Geometries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EchoesOfUzbekistan.Application.Places.PostPlace;
 public class PostPlaceCommandHandler : ICommandHandler<PostPlaceCommand, Guid>
@@ -21,14 +15,16 @@ public class PostPlaceCommandHandler : ICommandHandler<PostPlaceCommand, Guid>
     private readonly ILanguageRepository _languageRepository;
     private readonly IUserRepository _userRepository;
     private readonly IUserContextService _userContext;
+    private readonly IGuideRepository _guideRepository;
 
-    public PostPlaceCommandHandler(ILanguageRepository languageRepository, IUserContextService userContext, IUserRepository userRepository, IPlaceRepository placeRepository, IUnitOfWork unitOfWork)
+    public PostPlaceCommandHandler(ILanguageRepository languageRepository, IUserContextService userContext, IUserRepository userRepository, IPlaceRepository placeRepository, IUnitOfWork unitOfWork, IGuideRepository guideRepository)
     {
         _languageRepository = languageRepository;
         _userContext = userContext;
         _userRepository = userRepository;
         _placeRepository = placeRepository;
         _unitOfWork = unitOfWork;
+        _guideRepository = guideRepository;
     }
 
     public async Task<Result<Guid>> Handle(PostPlaceCommand request, CancellationToken cancellationToken)
@@ -58,7 +54,25 @@ public class PostPlaceCommandHandler : ICommandHandler<PostPlaceCommand, Guid>
             coordinates: point,
             status: PlaceStatus.Visible,
             originalLanguageId: language.Id,
-            authorId: request.AuthorId);
+            authorId: request.AuthorId,
+            audioLink: request.AudioLink == null ? null : new ResourceLink(request.AudioLink),
+            imageLink: request.ImageLink == null ? null : new ResourceLink(request.ImageLink));
+
+        var targetGuideIds = request.AudioGuidesIds?.Distinct().ToList() ?? new List<Guid>();
+
+        if (targetGuideIds.Count != 0)
+        {
+            var allTargetGuides = await _guideRepository.GetByIdsAsync(targetGuideIds, cancellationToken);
+            // Add to new guides
+            foreach (var guide in allTargetGuides)
+            {
+                if (!guide.Places.Contains(place))
+                {
+                    guide.AddPlace(place);
+                }
+            }
+        }
+        
 
         _placeRepository.Add(place);
 

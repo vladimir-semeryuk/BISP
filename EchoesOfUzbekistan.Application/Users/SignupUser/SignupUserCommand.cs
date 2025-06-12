@@ -7,4 +7,5 @@ public record SignupUserCommand(
     string Surname,
     string Password,
     string CountryName,
-    string CountryCode) : ICommand<Guid>;
+    string CountryCode,
+    string? City) : ICommand<Guid>;

@@ -13,26 +13,30 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         // Configure properties
         builder.Property(u => u.FirstName)
-            .HasConversion(name => name.value, name => new FirstName(name))
+            .HasConversion(name => name.Value, name => new FirstName(name))
             .IsRequired();
 
         builder.Property(u => u.Surname)
-            .HasConversion(surname => surname.value, surname => new Surname(surname))
+            .HasConversion(surname => surname.Value, surname => new Surname(surname))
             .IsRequired();
 
         builder.Property(u => u.Email)
-            .HasConversion(email => email.value, email => new Email(email))
+            .HasConversion(email => email.Value, email => new Email(email))
             .IsRequired();
 
         builder.Property(u => u.RegistrationDateUtc)
             .IsRequired();
         
         builder.Property(u => u.City)
-            .HasConversion(city => city != null ? city.value : null, city => city != null ? new City(city) : null)
+            .HasConversion(city => city != null ? city.Value : null, city => city != null ? new City(city) : null)
             .IsRequired(false);
 
         builder.Property(u => u.AboutMe)
-            .HasConversion(desc => desc != null ? desc.value : null, desc => desc != null ? new AboutMe(desc) : null);
+            .HasConversion(desc => desc != null ? desc.Value : null, desc => desc != null ? new AboutMe(desc) : null);
+
+        builder.Property(u => u.ImageLink)
+            .HasConversion(img => img != null ? img.Value : null, link => link != null ? new ResourceLink(link) : null)
+            .IsRequired(false);
 
         builder.OwnsOne(u => u.Country);
 
